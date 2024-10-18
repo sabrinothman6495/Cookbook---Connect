@@ -25,6 +25,8 @@ recipe-sharing-app/
 │   │   ├── App.jsx                # Main app component
 │   │   ├── index.js               # Entry point for React
 │   │   └── api/                   # API service for making requests
+│   │       ├── nutritionApi.js    # Handles Nutrition API requests
+│   │       └── socialMediaApi.js  # Handles social media sharing links
 │   ├── .env                       # Environment variables for the client
 │   └── package.json               # Client dependencies and scripts
 ├── server/                        # Back-end code (Node.js, Express)
@@ -32,8 +34,8 @@ recipe-sharing-app/
 │   │   ├── db.js                  # Database connection settings
 │   │   ├── auth.js                # Authentication configuration
 │   ├── controllers/               # Controller functions for API endpoints
-│   │   ├── recipeController.js    # Logic for handling recipes
-│   │   └── userController.js      # Logic for handling users
+│   │   ├── recipeController.js     # Logic for handling recipes
+│   │   └── userController.js       # Logic for handling users
 │   ├── models/                    # Database models
 │   │   ├── Recipe.js              # Recipe model
 │   │   └── User.js                # User model
@@ -45,7 +47,7 @@ recipe-sharing-app/
 │   ├── utils/                     # Utility functions (reusable logic)
 │   │   ├── tokenUtils.js          # Utility for JWT token generation and verification
 │   │   ├── errorHandler.js        # Error handling middleware
-│   │   ├── apiHelper.js           # Helper for external API calls (e.g., Nutrition, Social Media Sharing API)
+│   │   ├── apiHelper.js           # Helper for external API calls (e.g., Nutrition, Walmart API)
 │   │   ├── dataFormatter.js       # Helper for formatting recipe/user data
 │   │   └── hashUtils.js           # Utility for password hashing and comparison
 │   ├── .env                       # Environment variables for the server
@@ -55,10 +57,10 @@ recipe-sharing-app/
 ├── README.md                      # Project documentation
 └── LICENSE                        # License information
 
-Roles Breakdown:
+Roles Breakdown
 Front-End Developers (2)
-
 Files:
+
 client/src/components/Header.jsx
 Responsibilities: Create a responsive header component that includes navigation links and possibly a logo. Handle state for active navigation links.
 
@@ -83,15 +85,12 @@ Responsibilities: Create a detailed view for recipes, including ingredients, pre
 client/src/pages/Contact.jsx
 Responsibilities: Build the contact page layout with a form for users to submit inquiries.
 
-client/src/context/AuthContext.js
-Responsibilities: Implement context for managing user authentication state and related actions.
-
-client/src/context/RecipeContext.js
-Responsibilities: Implement context for managing global recipe data, allowing components to access and modify recipes.
+client/src/styles/theme.js
+Responsibilities: Customize Mantine's theme for consistent styling across the app.
 
 Back-End Developers (2)
-
 Files:
+
 server/controllers/recipeController.js
 Responsibilities: Handle CRUD operations for recipes, including creating, reading, updating, and deleting recipes in the database.
 
@@ -119,20 +118,26 @@ Responsibilities: Create functions for generating and verifying JWT tokens used 
 server/utils/errorHandler.js
 Responsibilities: Implement middleware for consistent error handling across the server application.
 
-server/utils/apiHelper.js
-Responsibilities: Develop helper functions to facilitate external API requests (Nutrition API, Walmart API, etc.).
-
 server/utils/dataFormatter.js
 Responsibilities: Create functions to format and sanitize incoming recipe and user data for database storage.
 
 server/utils/hashUtils.js
 Responsibilities: Implement functions for hashing passwords and verifying them during user login.
 
-API and JWT Specialist (1)
-
+API and JWT Authentication Specialist (1)
 Files:
+
+client/src/api/nutritionApi.js
+Responsibilities: Implement API calls for fetching nutritional data from the nutrition API.
+
+client/src/api/socialMediaApi.js
+Responsibilities: Set up functions for sharing recipes on social media platforms like Facebook and Twitter.
+
 client/src/hooks/useAuth.js
 Responsibilities: Implement a custom hook for handling authentication logic, such as login and logout. It may also include fetching user data after authentication.
+
+client/src/context/AuthContext.js
+Responsibilities: Implement context for managing user authentication state and related actions.
 
 client/src/hooks/useRecipes.js
 Responsibilities: Develop a custom hook for managing recipe-related actions, such as fetching recipes from the server or saving new recipes.
@@ -142,6 +147,14 @@ Responsibilities: Configure authentication settings, including JWT secret and ex
 
 server/.env
 Responsibilities: Ensure that API keys and sensitive information are stored securely in environment variables.
+
+server/utils/apiHelper.js
+Responsibilities: Collaborate with back-end developers to create and optimize external API calls for nutrition and social media sharing.
+
+server/utils/tokenUtils.js
+Responsibilities: Oversee the creation and verification of JWT tokens, ensuring secure authentication processes.
+
+Documentation: Document the authentication process, API endpoints, and how to use external APIs for the team.
 
 Summary:
 This breakdown ensures that responsibilities are clear among the team members, promoting efficient collaboration and a well-structured workflow throughout the project. Each role focuses on their respective areas, allowing for specialization while still contributing to the overall development of the Recipe Sharing App. The front-end developers handle the user interface and experience, the back-end developers manage the server logic and database interactions, and the API and JWT specialist oversees authentication and external API integrations.
