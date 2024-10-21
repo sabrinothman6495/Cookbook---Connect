@@ -9,11 +9,13 @@ recipe-sharing-app/
 │   │   │   ├── Footer.jsx         # Footer component
 │   │   │   ├── RecipeCard.jsx     # Component for displaying recipes
 │   │   │   ├── RecipeForm.jsx     # Form for adding/editing recipes
-│   │   │   └── UserProfile.jsx    # Component for user profiles
+│   │   │   |── RecipeCarousel.jsx # Component for Favorited and Created Recipe Carousel
+|   |   |   ├── SocialShare.jsx    # Component for Social Media Sharing
 │   │   ├── pages/                 # Different pages of the app
 │   │   │   ├── Home.jsx           # Home page
 │   │   │   ├── RecipeDetails.jsx  # Page for detailed recipe view
-│   │   │   └── Contact.jsx        # Contact page
+│   │   │   |── Contact.jsx        # Contact page
+|   |   |   └── UserProfile.jsx    # Page for user profiles
 │   │   ├── context/               # Context API for global state management
 │   │   │   ├── AuthContext.js     # Context for authentication
 │   │   │   └── RecipeContext.js   # Context for recipe data
@@ -21,7 +23,8 @@ recipe-sharing-app/
 │   │   │   ├── useAuth.js         # Hook for handling authentication logic
 │   │   │   └── useRecipes.js      # Hook for handling recipe-related logic
 │   │   ├── styles/                # CSS/SCSS files (using Mantine)
-│   │   │   └── theme.js           # Custom Mantine theme configuration
+│   │   │   |── theme.js           # Custom Mantine theme configuration
+|   |   |   └── CardsCarousel.module.css    # Mantine CSS for Cards Carousel
 │   │   ├── App.jsx                # Main app component
 │   │   ├── index.js               # Entry point for React
 │   │   └── api/                   # API service for making requests
