@@ -1,98 +1,105 @@
-import React, { useState, useContext } from 'react';
-import { Modal, Button, TextInput, Avatar, Carousel } from '@mantine/core';
-import { AuthContext } from '../context/AuthContext';
-import { useMediaQuery } from '@mantine/hooks';
-import { CardsCarousel } from './CardsCarousel';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Button, Modal, TextInput, Grid, Title, Group, Text } from '@mantine/core';
+import { useMantineTheme } from '@mantine/core';
+import { CardsCarousel } from './CardsCarousel'; // For favorited recipes carousel
+import RecipeCard from './RecipeCard'; // RecipeCard component for created recipes
+import { fetchUserProfile, fetchFavoritedRecipes, fetchCreatedRecipes, updateProfile } from '../api/user'; // Example API functions
 
-const UserProfile = () => {
-  const { user, updateUser } = useContext(AuthContext);
-  const [opened, setOpened] = useState(false);
-  const [editData, setEditData] = useState({
-    avatar: user.avatar,
-    username: user.username,
-    name: user.name,
-    email: user.email,
-  });
+const UserProfile = ({ userId, currentUserId }) => {  // currentUserId should be passed from parent or context
+  const [profile, setProfile] = useState(null);
+  const [favoritedRecipes, setFavoritedRecipes] = useState([]);
+  const [createdRecipes, setCreatedRecipes] = useState([]);
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+  const [editedProfile, setEditedProfile] = useState({ avatar: '', username: '', name: '', email: '' });
 
-  const handleInputChange = (e) => {
-    setEditData({ ...editData, [e.target.name]: e.target.value });
+  const theme = useMantineTheme();
+
+  useEffect(() => {
+    // Fetch user profile, favorited recipes, and created recipes
+    fetchUserProfile(userId).then((data) => setProfile(data));
+    fetchFavoritedRecipes(userId).then((data) => setFavoritedRecipes(data));
+    fetchCreatedRecipes(userId).then((data) => setCreatedRecipes(data));
+  }, [userId]);
+
+  const handleEditProfile = () => {
+    // Update profile logic here
+    updateProfile(userId, editedProfile).then(() => {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        ...editedProfile,
+      }));
+      setEditProfileModalOpen(false);
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add validation for email here, then update the user
-    if (validateEmail(editData.email)) {
-      updateUser(editData);
-      setOpened(false);
-    } else {
-      alert('Please enter a valid email.');
-    }
-  };
+  if (!profile) return <div>Loading...</div>;
 
-  const validateEmail = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
-
-  const isOwnProfile = true; // Check if logged-in user matches profile
+  // Check if the profile being viewed is the current user's profile
+  const isCurrentUser = userId === currentUserId;
 
   return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <Avatar src={user.avatar} size="xl" radius="xl" />
-      <h2>{user.username}</h2>
-      <p>{user.name}</p>
-      <p>{user.email}</p>
+    <div>
+      {/* Profile Section */}
+      <Group position="center" direction="column" spacing="md">
+        <Avatar src={profile.avatar} size={120} radius={60} />
+        <Title order={2}>{profile.username}</Title>
+        <Text>{profile.name}</Text>
+        <Text>{profile.email}</Text>
+        {isCurrentUser && (
+          <Button onClick={() => setEditProfileModalOpen(true)}>Edit Profile</Button>
+        )}
+      </Group>
 
-      {isOwnProfile && (
-        <Button onClick={() => setOpened(true)} mt="md">
-          Edit Profile
-        </Button>
-      )}
-
-      {/* Modal for editing profile */}
+      {/* Edit Profile Modal */}
       <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
+        opened={editProfileModalOpen}
+        onClose={() => setEditProfileModalOpen(false)}
         title="Edit Profile"
-        centered
       >
-        <form onSubmit={handleSubmit}>
-          <Avatar src={editData.avatar} size="xl" radius="xl" />
-          <TextInput
-            label="Username"
-            name="username"
-            value={editData.username}
-            onChange={handleInputChange}
-            required
-          />
-          <TextInput
-            label="Name"
-            name="name"
-            value={editData.name}
-            onChange={handleInputChange}
-            required
-          />
-          <TextInput
-            label="Email"
-            name="email"
-            value={editData.email}
-            onChange={handleInputChange}
-            required
-            error={!validateEmail(editData.email)}
-          />
-          <Button type="submit" mt="md">
-            Save
-          </Button>
-        </form>
+        <TextInput
+          label="Avatar URL"
+          value={editedProfile.avatar}
+          onChange={(e) => setEditedProfile({ ...editedProfile, avatar: e.target.value })}
+        />
+        <TextInput
+          label="Username"
+          value={editedProfile.username}
+          onChange={(e) => setEditedProfile({ ...editedProfile, username: e.target.value })}
+        />
+        <TextInput
+          label="Name"
+          value={editedProfile.name}
+          onChange={(e) => setEditedProfile({ ...editedProfile, name: e.target.value })}
+        />
+        <TextInput
+          label="Email"
+          value={editedProfile.email}
+          onChange={(e) => setEditedProfile({ ...editedProfile, email: e.target.value })}
+        />
+        <Button onClick={handleEditProfile}>Save Changes</Button>
       </Modal>
 
-      {/* Carousel for favorited recipes */}
-      <h3>Favorited Recipes</h3>
-      <CardsCarousel data={user.favoritedRecipes} />
+      {/* Favorited Recipes Carousel */}
+      <div style={{ margin: '40px 0' }}>
+        <Title order={3} align="center">
+          Favorited Recipes
+        </Title>
+        <CardsCarousel recipes={favoritedRecipes} />
+      </div>
 
-      {/* Carousel for posted recipes */}
-      <h3>Your Posted Recipes</h3>
-      <CardsCarousel data={user.postedRecipes} />
+      {/* Created Recipes Grid */}
+      <div style={{ margin: '40px 0' }}>
+        <Title order={3} align="center">
+          Created Recipes
+        </Title>
+        <Grid gutter="lg">
+          {createdRecipes.map((recipe) => (
+            <Grid.Col key={recipe.id} span={4}>
+              <RecipeCard recipe={recipe} />
+            </Grid.Col>
+          ))}
+        </Grid>
+      </div>
     </div>
   );
 };
