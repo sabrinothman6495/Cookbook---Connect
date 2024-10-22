@@ -115,9 +115,6 @@ Responsibilities: Set up routes for user-related API endpoints, linking them to 
 server/middleware/authMiddleware.js
 Responsibilities: Implement middleware for authenticating requests using JWT, ensuring secure access to protected routes.
 
-server/utils/tokenUtils.js
-Responsibilities: Create functions for generating and verifying JWT tokens used for authentication.
-
 server/utils/errorHandler.js
 Responsibilities: Implement middleware for consistent error handling across the server application.
 
@@ -129,6 +126,9 @@ Responsibilities: Implement functions for hashing passwords and verifying them d
 
 API and JWT Authentication Specialist (1)
 Files:
+
+server/utils/tokenUtils.js
+Responsibilities: Create functions for generating and verifying JWT tokens used for authentication.
 
 client/src/api/nutritionApi.js
 Responsibilities: Implement API calls for fetching nutritional data from the nutrition API.

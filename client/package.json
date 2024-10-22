@@ -12,7 +12,11 @@
     },
     "dependencies": {
       "axios": "^1.4.0",
-      "mantine": "^6.0.0",    
+      "@mantine/core": "^6.0.0", 
+      "@mantine/hooks": "^6.0.0",    
+      "@mantine/form": "^6.0.0",
+      "@mantine/carousel": "^6.0.0",
+      "@mantine/modals": "^6.0.0",   
       "react": "^18.0.0",
       "react-dom": "^18.0.0",
       "react-router-dom": "^6.14.0"
