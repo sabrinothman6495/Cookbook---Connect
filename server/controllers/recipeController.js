@@ -77,4 +77,3 @@ module.exports = {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
-};
