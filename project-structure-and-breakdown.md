@@ -130,9 +130,6 @@ Responsibilities: Develop a custom hook for managing recipe-related actions, suc
 API and JWT Authentication Specialist (1)
 Files:
 
-server/utils/tokenUtils.js
-Responsibilities: Create functions for generating and verifying JWT tokens used for authentication.
-
 client/src/api/nutritionApi.js
 Responsibilities: Implement API calls for fetching nutritional data from the nutrition API.
 
