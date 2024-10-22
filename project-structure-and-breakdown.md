@@ -115,9 +115,6 @@ Responsibilities: Set up routes for user-related API endpoints, linking them to 
 server/middleware/authMiddleware.js
 Responsibilities: Implement middleware for authenticating requests using JWT, ensuring secure access to protected routes.
 
-server/utils/tokenUtils.js
-Responsibilities: Create functions for generating and verifying JWT tokens used for authentication.
-
 server/utils/errorHandler.js
 Responsibilities: Implement middleware for consistent error handling across the server application.
 
@@ -126,6 +123,9 @@ Responsibilities: Create functions to format and sanitize incoming recipe and us
 
 server/utils/hashUtils.js
 Responsibilities: Implement functions for hashing passwords and verifying them during user login.
+
+client/src/hooks/useRecipes.js
+Responsibilities: Develop a custom hook for managing recipe-related actions, such as fetching recipes from the server or saving new recipes.
 
 API and JWT Authentication Specialist (1)
 Files:
@@ -141,9 +141,6 @@ Responsibilities: Implement a custom hook for handling authentication logic, suc
 
 client/src/context/AuthContext.js
 Responsibilities: Implement context for managing user authentication state and related actions.
-
-client/src/hooks/useRecipes.js
-Responsibilities: Develop a custom hook for managing recipe-related actions, such as fetching recipes from the server or saving new recipes.
 
 server/config/auth.js
 Responsibilities: Configure authentication settings, including JWT secret and expiration settings.
