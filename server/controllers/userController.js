@@ -33,28 +33,6 @@ function UserManagement() {
     setNewUser({ ...newUser, [name]: value });
   };
 
-  return (
-    <div>
-      <h1>User Management</h1>
-
-      <h2>Create User</h2>
-      <input
-        type="text"
-        name="username"
-        value={newUser.username}
-        onChange={handleInputChange}
-        placeholder="Username"
-      />
-      <input
-        type="email"
-        name="email"
-        value={newUser.email}
-        onChange={handleInputChange}
-        placeholder="Email"
-      />
-      <button onClick={handleCreateUser}>Create User</button>
-    </div>
-  );
 }
 
 export default UserManagement;
