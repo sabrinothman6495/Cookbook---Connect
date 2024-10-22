@@ -124,11 +124,11 @@ Responsibilities: Create functions to format and sanitize incoming recipe and us
 server/utils/hashUtils.js
 Responsibilities: Implement functions for hashing passwords and verifying them during user login.
 
+client/src/hooks/useRecipes.js
+Responsibilities: Develop a custom hook for managing recipe-related actions, such as fetching recipes from the server or saving new recipes.
+
 API and JWT Authentication Specialist (1)
 Files:
-
-server/utils/tokenUtils.js
-Responsibilities: Create functions for generating and verifying JWT tokens used for authentication.
 
 client/src/api/nutritionApi.js
 Responsibilities: Implement API calls for fetching nutritional data from the nutrition API.
@@ -141,9 +141,6 @@ Responsibilities: Implement a custom hook for handling authentication logic, suc
 
 client/src/context/AuthContext.js
 Responsibilities: Implement context for managing user authentication state and related actions.
-
-client/src/hooks/useRecipes.js
-Responsibilities: Develop a custom hook for managing recipe-related actions, such as fetching recipes from the server or saving new recipes.
 
 server/config/auth.js
 Responsibilities: Configure authentication settings, including JWT secret and expiration settings.
