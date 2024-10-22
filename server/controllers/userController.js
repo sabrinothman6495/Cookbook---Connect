@@ -1,60 +1,73 @@
-import React, { useState, useEffect } from 'react';
-
-function UserManagement() {
-  const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ username: '', email: '' });
-
-  // Fetch all users when component mounts
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
+import { User } from '../models/user.js';
+//to get all users
+export const getAllUsers = async (_req, res) => {
     try {
-      const data = await ('');
-      setUsers(data);
+      const users = await User.findAll({
+        attributes: { exclude: ['password'] }
+      });
+      res.json(users);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      res.status(500).json({ message: error.message });
     }
   };
-
-  const handleCreateUser = async () => {
+  export const getUserById = async (req, res) => {
+    const { id } = req.params;
     try {
-      const createdUser = await ('', newUser);
-      setUsers([...users, createdUser]);
-      setNewUser({ username: '', email: '' });
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ['password'] }
+      });
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
     } catch (error) {
-      console.error('Error creating user:', error);
+      res.status(500).json({ message: error.message });
     }
   };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
+  
+  // to post a user
+  export const createUser = async (req, res) => {
+    const { username, password } = req.body;
+    try {
+      const newUser = await User.create({ username, password });
+      res.status(201).json(newUser);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   };
-
-  return (
-    <div>
-      <h1>User Management</h1>
-
-      <h2>Create User</h2>
-      <input
-        type="text"
-        name="username"
-        value={newUser.username}
-        onChange={handleInputChange}
-        placeholder="Username"
-      />
-      <input
-        type="email"
-        name="email"
-        value={newUser.email}
-        onChange={handleInputChange}
-        placeholder="Email"
-      />
-      <button onClick={handleCreateUser}>Create User</button>
-    </div>
-  );
-}
-
-export default UserManagement;
+  
+  // to put a user
+  export const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { username, password } = req.body;
+    try {
+      const user = await User.findByPk(id);
+      if (user) {
+        user.username = username;
+        user.password = password;
+        await user.save();
+        res.json(user);
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
+  
+  // to delete a user
+  export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const user = await User.findByPk(id);
+      if (user) {
+        await user.destroy();
+        res.json({ message: 'User deleted' });
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
