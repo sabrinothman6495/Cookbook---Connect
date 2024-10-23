@@ -1,6 +1,7 @@
-const { Recipe } = require('./models'); 
-const { body, validationResult } = require('express-validator'); 
+const { Recipe } = require('../models'); // Correct path to models directory
+const { body, validationResult } = require('express-validator');
 
+// Create a new recipe
 const createRecipe = [
   body('name').notEmpty().withMessage('Name is required'),
   body('ingredients').notEmpty().withMessage('Ingredients are required'),
@@ -18,6 +19,7 @@ const createRecipe = [
   }
 ];
 
+// Get all recipes
 const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.findAll();
@@ -27,6 +29,7 @@ const getAllRecipes = async (req, res) => {
   }
 };
 
+// Get recipe by ID
 const getRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByPk(req.params.id);
@@ -40,6 +43,7 @@ const getRecipeById = async (req, res) => {
   }
 };
 
+// Update a recipe
 const updateRecipe = async (req, res) => {
   try {
     const [updated] = await Recipe.update(req.body, {
@@ -56,13 +60,14 @@ const updateRecipe = async (req, res) => {
   }
 };
 
+// Delete a recipe
 const deleteRecipe = async (req, res) => {
   try {
     const deleted = await Recipe.destroy({
       where: { recipeID: req.params.id },
     });
     if (deleted) {
-      res.status(204).send(); 
+      res.status(204).send();
     } else {
       res.status(404).json({ error: 'Recipe not found' });
     }
@@ -77,3 +82,4 @@ module.exports = {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+};
