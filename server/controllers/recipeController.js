@@ -10,7 +10,7 @@ function RecipeManagement() {
     difficulty: '',
     servings: 1,
     image: ''
- });
+  });
 
   // Fetch all users when component mounts
   useEffect(() => {
