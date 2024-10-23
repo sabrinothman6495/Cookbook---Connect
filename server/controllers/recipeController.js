@@ -70,11 +70,3 @@ const deleteRecipe = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-module.exports = {
-  createRecipe,
-  getAllRecipes,
-  getRecipeById,
-  updateRecipe,
-  deleteRecipe,
-};
