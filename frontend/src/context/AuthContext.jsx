@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { verifyToken, generateToken } from '../utils/tokenUtils';
 
@@ -37,11 +38,16 @@ const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
+  const contextValue = useMemo(() => ({ user, login, logout, loading }), [user, loading]);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
+};
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthProvider;

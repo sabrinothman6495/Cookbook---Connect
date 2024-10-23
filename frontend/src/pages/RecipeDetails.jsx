@@ -14,9 +14,26 @@ function RecipeDetails() {
   useEffect(() => {
     // Fetch the recipe data from the backend using the recipe id
     fetch(`/api/recipes/${id}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((data) => {
-        setRecipe(data);
+    fetch(`/api/favorites/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setIsFavorited(data.isFavorited);
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
         setLoading(false);
       });
 
@@ -30,7 +47,7 @@ function RecipeDetails() {
 
   const handleFavoriteToggle = () => {
     const url = `/api/favorites/${id}`;
-    const method = isFavorited ? 'DELETE' : 'POST';
+      <Image src={recipe.image || ''} alt={recipe.title || 'Recipe Image'} fit="contain" mb="md" />
 
     fetch(url, { method })
       .then((response) => {

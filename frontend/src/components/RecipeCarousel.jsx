@@ -3,6 +3,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { Paper, Text, Title, Button, useMantineTheme, rem } from '@mantine/core';
 import classes from '../styles/CardsCarousel.module.css';
 
+
 function Card({ image, title, category, onRemove }) {
   return (
     <Paper
@@ -26,6 +27,26 @@ function Card({ image, title, category, onRemove }) {
     </Paper>
   );
 }
+
+import PropTypes from 'prop-types';
+
+CardsCarousel.propTypes = {
+  recipes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+  onRemoveRecipe: PropTypes.func.isRequired,
+};
+Card.propTypes = {
+  image: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  onRemove: PropTypes.func.isRequired,
+};
 
 export function CardsCarousel({ recipes, onRemoveRecipe }) {
   const theme = useMantineTheme();

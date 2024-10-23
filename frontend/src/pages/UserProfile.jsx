@@ -4,6 +4,7 @@ import { useMantineTheme } from '@mantine/core';
 import { CardsCarousel } from './CardsCarousel'; // For favorited recipes carousel
 import RecipeCard from './RecipeCard'; // RecipeCard component for created recipes
 import { fetchUserProfile, fetchFavoritedRecipes, fetchCreatedRecipes, updateProfile } from '../api/user'; // Example API functions
+import PropTypes from 'prop-types';
 
 const UserProfile = ({ userId, currentUserId }) => {  // currentUserId should be passed from parent or context
   const [profile, setProfile] = useState(null);
@@ -102,6 +103,10 @@ const UserProfile = ({ userId, currentUserId }) => {  // currentUserId should be
       </div>
     </div>
   );
+};
+UserProfile.propTypes = {
+  userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
 };
 
 export default UserProfile;
