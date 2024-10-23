@@ -46,4 +46,5 @@ const connectDB = async () => {
   });
 };
 
-export { sequelize, pool, connectDB 
+export { sequelize, pool, connectDB }
+
