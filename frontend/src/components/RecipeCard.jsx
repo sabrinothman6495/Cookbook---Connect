@@ -1,5 +1,6 @@
 import { IconHeart } from '@tabler/icons-react';
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
+import PropTypes from 'prop-types';
 import classes from '../styles/BadgeCard.module.css';
 
 export function BadgeCard({ recipe }) {
@@ -51,3 +52,17 @@ export function BadgeCard({ recipe }) {
     </Card>
   );
 }
+
+BadgeCard.propTypes = {
+  recipe: PropTypes.shape({
+    image: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    badges: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        emoji: PropTypes.node.isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
+};

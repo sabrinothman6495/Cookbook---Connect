@@ -1,26 +1,49 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
+import { Sequelize } from 'sequelize';
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
 
-// Load environment variables from .env file
 dotenv.config();
 
-// Create a new pool instance to manage connections
+// Sequelize configuration
+const DB_NAME = process.env.DB_NAME;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_PORT = process.env.DB_PORT || 5432; // Default PostgreSQL port
+
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
+  port: DB_PORT,
+  dialect: 'postgres', // Ensure using PostgreSQL
+});
+
+// PG Pool configuration for direct queries if needed
 const pool = new Pool({
-  user: process.env.DB_USER,      // e.g., 'postgres'
-  host: process.env.DB_HOST,      // e.g., 'localhost'
-  database: process.env.DB_NAME,  // e.g., 'recipe_db'
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT || 5432,  // Default PostgreSQL port
+  user: DB_USER,
+  host: DB_HOST,
+  database: DB_NAME,
+  password: DB_PASSWORD,
+  port: DB_PORT,
 });
 
-// Connect to the database and log a successful connection or error
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error('Error acquiring client', err.stack);
-  } else {
-    console.log('Database connected successfully');
+// Function to connect to the database
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('You are connected to your cookbook database with Sequelize');
+  } catch (error) {
+    console.error('Could not connect to your cookbook database with Sequelize:', error);
+    process.exit(1);
   }
-});
 
-// Export the pool instance for use in other parts of your app
-module.exports = pool;
+  // Test connection with Pool
+  pool.connect((err) => {
+    if (err) {
+      console.error('Error acquiring client from pool', err.stack);
+    } else {
+      console.log('Database connected successfully with PG Pool');
+    }
+  });
+};
+
+export { sequelize, pool, connectDB 

@@ -1,120 +1,85 @@
-import React, { useState, useEffect } from 'react';
+const { Recipe } = require('../models'); // Correct path to models directory
+const { body, validationResult } = require('express-validator');
 
-function RecipeManagement() {
-  const [recipes, setRecipes] = useState([]);
-  const [newRecipe, setNewRecipe] = useState({ 
-    title: '', 
-    ingredients: '',
-    instructions: '',
-    time: 1,
-    difficulty: '',
-    servings: 1,
-    image: ''
-  });
-
-  // Fetch all users when component mounts
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
-
-  const fetchRecipes = async () => {
-    try {
-        const response = await fetch('');
-        if (!response.ok) throw new Error('Failed to fetch recipes');
-        const recipes = await response.json();
-        setRecipes(recipes);
-    } catch (error) {
-      console.error('Error fetching users:', error);
+// Create a new recipe
+const createRecipe = [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('ingredients').notEmpty().withMessage('Ingredients are required'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-  };
-
-  const handleCreateRecipe  = async () => {
     try {
-        const response = await fetch('', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newRecipe),
-          });
-    
-          if (!response.ok) throw new Error('Failed to create recipe');
-          const createdRecipe = await response.json();
-          setRecipes([...recipes, createdRecipe]);
-          setNewRecipe({ title: '', ingredients: '', instructions: '', userId: 1 });
-        } catch (error) {
-          console.error('Error creating recipe:', error);
-        }
-  };
-
-  const handleDeleteRecipe = async (id) => {
-    try {
-      const response = await fetch('', {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) throw new Error('Failed to delete recipe');
-      setRecipes(recipes.filter((recipe) => recipe.id !== id));
+      const newRecipe = await Recipe.create(req.body);
+      res.status(201).json(newRecipe);
     } catch (error) {
-      console.error('Error deleting recipe:', error);
+      res.status(400).json({ error: error.message });
     }
-  };
+  }
+];
 
-  return (
-    <div>
-    <h1>Recipe Manager</h1>
+// Get all recipes
+const getAllRecipes = async (req, res) => {
+  try {
+    const recipes = await Recipe.findAll();
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    <h2>Create New Recipe</h2>
-    <input
-      type="text"
-      value={newRecipe.title}
-      onChange={(e) => setNewRecipe({ ...newRecipe, title: e.target.value })}
-      placeholder="Title"
-    />
-    <textarea
-      value={newRecipe.ingredients}
-      onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value })}
-      placeholder="Ingredients"
-    ></textarea>
-    <textarea
-      value={newRecipe.time}
-      onChange={(e) => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
-      placeholder="Time"
-    ></textarea>
-    <textarea
-      value={newRecipe.difficulty}
-      onChange={(e) => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
-      placeholder="Difficulty"
-    ></textarea>
-    <textarea
-      value={newRecipe.servings}
-      onChange={(e) => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
-      placeholder="Servings"
-    ></textarea>
-    <textarea
-      value={newRecipe.image}
-      onChange={(e) => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
-      placeholder="Image"
-    ></textarea>
-    <button onClick={handleCreateRecipe}>Create Recipe</button>
+// Get recipe by ID
+const getRecipeById = async (req, res) => {
+  try {
+    const recipe = await Recipe.findByPk(req.params.id);
+    if (recipe) {
+      res.status(200).json(recipe);
+    } else {
+      res.status(404).json({ error: 'Recipe not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    <h2>All Recipes</h2>
-    <ul>
-      {recipes.map((recipe) => (
-        <li key={recipe.id}>
-          <h3>{recipe.title}</h3>
-          <p>{recipe.ingredients}</p>
-          <p>{recipe.instructions}</p>
-          <p>{recipe.time}</p>
-          <p>{recipe.difficulty}</p>
-          <p>{recipe.servings}</p>
-          <p>{recipe.image}</p>
-          <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-}
+// Update a recipe
+const updateRecipe = async (req, res) => {
+  try {
+    const [updated] = await Recipe.update(req.body, {
+      where: { recipeID: req.params.id },
+    });
+    if (updated) {
+      const updatedRecipe = await Recipe.findByPk(req.params.id);
+      res.status(200).json(updatedRecipe);
+    } else {
+      res.status(404).json({ error: 'Recipe not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-export default RecipeManagement;
+// Delete a recipe
+const deleteRecipe = async (req, res) => {
+  try {
+    const deleted = await Recipe.destroy({
+      where: { recipeID: req.params.id },
+    });
+    if (deleted) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: 'Recipe not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createRecipe,
+  getAllRecipes,
+  getRecipeById,
+  updateRecipe,
+  deleteRecipe,
+};
