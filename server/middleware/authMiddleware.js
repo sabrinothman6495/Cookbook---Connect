@@ -70,4 +70,5 @@ export const authMiddleware = (req, res, next) => {
 };
 
 app.listen(3001, () => {
-  console.log('Auth server running on port 3001')});
+  console.log('Auth server running on port 3001');
+});
