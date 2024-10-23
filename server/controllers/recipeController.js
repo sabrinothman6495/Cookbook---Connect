@@ -1,4 +1,4 @@
-const { Recipe } = require('../models'); // Corrected path to models directory
+const { Recipe } = require('../models'); // Correct path to models directory
 const { body, validationResult } = require('express-validator');
 
 // Create a new recipe
@@ -29,7 +29,7 @@ const getAllRecipes = async (req, res) => {
   }
 };
 
-// Get a recipe by ID
+// Get recipe by ID
 const getRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByPk(req.params.id);
@@ -47,7 +47,7 @@ const getRecipeById = async (req, res) => {
 const updateRecipe = async (req, res) => {
   try {
     const [updated] = await Recipe.update(req.body, {
-      where: { id: req.params.id }, // Changed recipeID to id for consistency
+      where: { recipeID: req.params.id },
     });
     if (updated) {
       const updatedRecipe = await Recipe.findByPk(req.params.id);
@@ -64,7 +64,7 @@ const updateRecipe = async (req, res) => {
 const deleteRecipe = async (req, res) => {
   try {
     const deleted = await Recipe.destroy({
-      where: { id: req.params.id }, // Changed recipeID to id for consistency
+      where: { recipeID: req.params.id },
     });
     if (deleted) {
       res.status(204).send();
