@@ -76,10 +76,3 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
-module.exports = {
-  createRecipe,
-  getAllRecipes,
-  getRecipeById,
-  updateRecipe,
-  deleteRecipe,
-};
