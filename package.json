@@ -1,0 +1,19 @@
+{
+    "name": "recipe-sharing-app",
+    "version": "1.0.0",
+    "description": "A recipe sharing app with a full-stack setup using React, Express, and PostgreSQL",
+    "main": "server/server.js",
+    "scripts": {
+      "start": "concurrently \"npm run server\" \"npm run client\"",
+      "server": "cd server && nodemon server.js",
+      "client": "cd client && npm start",
+      "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+      "concurrently": "^7.0.0"
+    },
+    "devDependencies": {},
+    "author": "Your Name",
+    "license": "ISC"
+  }
