@@ -1,6 +1,5 @@
-const { title } = require('process');
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:'); 
+const sequelize = new Sequelize('sqlite::memory:'); // Change to your actual database config
 
 const Recipe = sequelize.define('Recipe', {
   recipeID: {
@@ -17,7 +16,7 @@ const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   },
   cookingTime: {
-    type: DataTypes.STRING, 
+    type: DataTypes.STRING,
     allowNull: false,
   },
   instructions: {
@@ -25,72 +24,85 @@ const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   },
   difficulty: {
-    type: DataTypes.ENUM('easy', 'medium', 'hard'), 
+    type: DataTypes.ENUM('easy', 'medium', 'hard'),
     allowNull: false,
   },
   servingSize: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  Image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
 }, {
-  tableName: 'recipes', 
+  tableName: 'recipes',
 });
+
+// Initialize database
 async function initializeDatabase() {
   await sequelize.sync();
 }
+
+// Seed database with dummy data
 async function seedDatabase() {
   const recipes = [
     {
-      title: 'Spaghetti Bolognese',
+      recipeName: 'Spaghetti Bolognese',
       ingredients: 'Spaghetti, minced meat, tomatoes, onion, garlic, olive oil, herbs',
-      time: '30 minutes',
+      cookingTime: '30 minutes',
       instructions: 'Cook spaghetti. In a separate pan, cook minced meat and add other ingredients.',
       difficulty: 'easy',
-      servings: 4,
+      servingSize: 4,
       Image: 'spaghetti.jpg',
-    
     },
     {
-        title: 'pizza',
-        ingredients: 'flour, yeast, water, tomato sauce, cheese, toppings',
-        time: '60 minutes',
-        instructions: 'Mix flour, yeast, and water to make dough. Add tomato sauce, cheese, and toppings.',
-        difficulty: 'difficult',
-        servings: 4,
-        Image: 'pizza.jpg',
+      recipeName: 'Pizza',
+      ingredients: 'Flour, yeast, water, tomato sauce, cheese, toppings',
+      cookingTime: '60 minutes',
+      instructions: 'Mix flour, yeast, and water to make dough. Add tomato sauce, cheese, and toppings.',
+      difficulty: 'hard',
+      servingSize: 4,
+      Image: 'pizza.jpg',
     },
     {
-        title: 'pancakes',
-        ingredients: 'flour, milk, eggs, sugar, butter',
-        time: '20 minutes',
-        instructions: 'Mix flour, milk, eggs, and sugar to make batter. Cook in a pan with butter.',
-        difficulty: 'easy',
-        servings: 4,
-        Image: 'pancakes.jpg',
+      recipeName: 'Pancakes',
+      ingredients: 'Flour, milk, eggs, sugar, butter',
+      cookingTime: '20 minutes',
+      instructions: 'Mix flour, milk, eggs, and sugar to make batter. Cook in a pan with butter.',
+      difficulty: 'easy',
+      servingSize: 4,
+      Image: 'pancakes.jpg',
     },
     {
-        title: 'chocolate cake',
-        ingredients: 'flour, sugar, cocoa powder, eggs, butter, milk',
-        time: '45 minutes',
-        instructions: 'Mix flour, sugar, cocoa powder, eggs, butter, and milk. Bake in oven.',
-        difficulty: 'medium',
-        servings: 8,
-        Image: 'chocolate-cake.jpg',
+      recipeName: 'Chocolate Cake',
+      ingredients: 'Flour, sugar, cocoa powder, eggs, butter, milk',
+      cookingTime: '45 minutes',
+      instructions: 'Mix flour, sugar, cocoa powder, eggs, butter, and milk. Bake in oven.',
+      difficulty: 'medium',
+      servingSize: 8,
+      Image: 'chocolate-cake.jpg',
     },
     {
-        title: 'chicken curry',
-        ingredients: 'chicken, curry paste, coconut milk, onion, garlic, ginger',
-        time: '45 minutes',
-        instructions: 'Cook chicken with curry paste, coconut milk, onion, garlic, and ginger.',
-        difficulty: 'medium',
-        servings: 4,
-        Image: 'chicken-curry.jpg',
+      recipeName: 'Chicken Curry',
+      ingredients: 'Chicken, curry paste, coconut milk, onion, garlic, ginger',
+      cookingTime: '45 minutes',
+      instructions: 'Cook chicken with curry paste, coconut milk, onion, garlic, and ginger.',
+      difficulty: 'medium',
+      servingSize: 4,
+      Image: 'chicken-curry.jpg',
     },
   ];
   await Recipe.bulkCreate(recipes);
 }
+
+// Main function to initialize and seed database
 async function main() {
   await initializeDatabase();
   await seedDatabase();
   console.log('Database initialized and seeded with dummy data.');
 }
+
+main().catch(console.error);
+
+module.exports = Recipe;
