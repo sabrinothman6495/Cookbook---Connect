@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:'); // Change to your actual database config
+import { Sequelize, DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.js'; // Change to your actual database config
 
 const Recipe = sequelize.define('Recipe', {
   recipeID: {
@@ -105,4 +105,4 @@ async function main() {
 
 main().catch(console.error);
 
-module.exports = Recipe;
+export default Recipe;

@@ -9,7 +9,7 @@ const Home = () => {
     // Fetch random recipes from the API
     const fetchRandomRecipes = async () => {
       try {
-        const response = await axios.get('/api/recipes/random?limit=3');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/recipes/random?limit=3`);
         setRandomRecipes(response.data);
       } catch (error) {
         console.error('Error fetching random recipes:', error);
