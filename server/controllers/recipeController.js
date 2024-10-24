@@ -73,8 +73,7 @@ const deleteRecipe = async (req, res) => {
 const { Recipe } = require('../models'); // Correct path to models directory
 const { body, validationResult } = require('express-validator');
 
-// Create a new recipe
-const createRecipe = [
+export const createRecipe = [
   body('name').notEmpty().withMessage('Name is required'),
   body('ingredients').notEmpty().withMessage('Ingredients are required'),
   async (req, res) => {
@@ -91,8 +90,7 @@ const createRecipe = [
   }
 ];
 
-// Get all recipes
-const getAllRecipes = async (req, res) => {
+export const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.findAll();
     res.status(200).json(recipes);
@@ -101,8 +99,7 @@ const getAllRecipes = async (req, res) => {
   }
 };
 
-// Get recipe by ID
-const getRecipeById = async (req, res) => {
+export const getRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByPk(req.params.id);
     if (recipe) {
@@ -115,8 +112,7 @@ const getRecipeById = async (req, res) => {
   }
 };
 
-// Update a recipe
-const updateRecipe = async (req, res) => {
+export const updateRecipe = async (req, res) => {
   try {
     const [updated] = await Recipe.update(req.body, {
       where: { recipeID: req.params.id },
@@ -132,8 +128,7 @@ const updateRecipe = async (req, res) => {
   }
 };
 
-// Delete a recipe
-const deleteRecipe = async (req, res) => {
+export const deleteRecipe = async (req, res) => {
   try {
     const deleted = await Recipe.destroy({
       where: { recipeID: req.params.id },
@@ -148,10 +143,10 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipe,
-  deleteRecipe,
+  deleteRecipe
 };
