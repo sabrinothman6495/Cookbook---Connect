@@ -1,7 +1,7 @@
-const { Recipe } = require('./models'); 
-const { body, validationResult } = require('express-validator'); 
+import Recipe from '../models/Recipe.js'; // Correct import
+import { body, validationResult } from 'express-validator';
 
-const createRecipe = [
+export const createRecipe = [
   body('name').notEmpty().withMessage('Name is required'),
   body('ingredients').notEmpty().withMessage('Ingredients are required'),
   async (req, res) => {
@@ -18,7 +18,7 @@ const createRecipe = [
   }
 ];
 
-const getAllRecipes = async (req, res) => {
+export const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.findAll();
     res.status(200).json(recipes);
@@ -27,7 +27,7 @@ const getAllRecipes = async (req, res) => {
   }
 };
 
-const getRecipeById = async (req, res) => {
+export const getRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByPk(req.params.id);
     if (recipe) {
@@ -40,7 +40,7 @@ const getRecipeById = async (req, res) => {
   }
 };
 
-const updateRecipe = async (req, res) => {
+export const updateRecipe = async (req, res) => {
   try {
     const [updated] = await Recipe.update(req.body, {
       where: { recipeID: req.params.id },
@@ -56,17 +56,25 @@ const updateRecipe = async (req, res) => {
   }
 };
 
-const deleteRecipe = async (req, res) => {
+export const deleteRecipe = async (req, res) => {
   try {
     const deleted = await Recipe.destroy({
       where: { recipeID: req.params.id },
     });
     if (deleted) {
-      res.status(204).send(); 
+      res.status(204).send();
     } else {
       res.status(404).json({ error: 'Recipe not found' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+export default {
+  createRecipe,
+  getAllRecipes,
+  getRecipeById,
+  updateRecipe,
+  deleteRecipe
 };

@@ -1,12 +1,6 @@
-function errorHandler (err) {
-    console.error(err)
-    res.status(500).send('An error occurred')
-  }
-  app.use(errorHandler);
+const errorHandler = (err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'An error occurred', error: err.message });
+  };
   
-  
-  function errorHandler(err) {
-      console.error(err);
-      res.status(500).send('recipe not found');
-  }
-  app.use(errorHandler);
+  export default errorHandler;
