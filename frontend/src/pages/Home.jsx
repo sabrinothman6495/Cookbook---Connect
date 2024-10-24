@@ -4,9 +4,7 @@ import axios from 'axios';
 
 const Home = () => {
   const [randomRecipes, setRandomRecipes] = useState([]);
-
   useEffect(() => {
-    // Fetch random recipes from the API
     const fetchRandomRecipes = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/recipes/random?limit=3`);
@@ -15,7 +13,6 @@ const Home = () => {
         console.error('Error fetching random recipes:', error);
       }
     };
-
     fetchRandomRecipes();
   }, []);
 

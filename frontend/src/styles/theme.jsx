@@ -1,3 +1,4 @@
+import React from 'react';
 import { MantineProvider } from '@mantine/core';
 
 export const theme = {
@@ -30,10 +31,10 @@ export const theme = {
   },
 };
 
-export const ThemeProvider = ({ children }) => {
-  return (
-    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-      {children}
-    </MantineProvider>
-  );
-};
+const ThemeProvider = ({ children }) => (
+  <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+    {children}
+  </MantineProvider>
+);
+
+export default ThemeProvider;
