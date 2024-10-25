@@ -1,8 +1,13 @@
-const { DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/database');
+import { DataTypes } from 'sequelize';
+import bcrypt from 'bcrypt';
+import { sequelize } from '../config/db.js'; // Correct path
 
 const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -72,4 +77,4 @@ User.associate = (models) => {
   });
 };
 
-module.exports = User;
+export default User;

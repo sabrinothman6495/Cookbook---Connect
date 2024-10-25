@@ -1,10 +1,12 @@
-import express, { json } from 'express';
-import { sign } from 'jsonwebtoken';
-import { compare } from 'bcryptjs';
+import express from 'express';
+import { json } from 'express';
+import pkg from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
+
+const { compare } = pkg;
 
 const app = express();
 app.use(json()); // Middleware to parse JSON
@@ -41,15 +43,10 @@ app.post('/login', async (req, res) => {
   };
 
   // Sign token and return it
-  sign(
-    payload,
-    secret,
-    { expiresIn: '1h' }, // Token expires in 1 hour
-    (err, token) => {
-      if (err) throw err;
-      res.json({ token });
-    }
-  );
+  jwt.sign(payload, secret, { expiresIn: '1h' }, (err, token) => {
+    if (err) throw err;
+    res.json({ token });
+  });
 });
 
 // Middleware to protect routes

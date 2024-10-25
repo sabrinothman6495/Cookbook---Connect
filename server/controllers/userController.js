@@ -1,6 +1,6 @@
-import { User } from '../models/user.js';
+import User from '../models/user.js';
 
-// Get all users
+// to get all users
 export const getAllUsers = async (_req, res) => {
   try {
     const users = await User.findAll({ attributes: { exclude: ['password'] } });
@@ -10,7 +10,7 @@ export const getAllUsers = async (_req, res) => {
   }
 };
 
-// Get user by ID
+// to get user by ID
 export const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -25,7 +25,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// Create a new user
+// to create a user
 export const createUser = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -36,7 +36,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-// Update a user
+// to update a user
 export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
