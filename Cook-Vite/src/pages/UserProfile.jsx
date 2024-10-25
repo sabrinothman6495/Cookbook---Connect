@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Modal, TextInput, Grid, Title, Group, Text } from '@mantine/core';
 import { useMantineTheme } from '@mantine/core';
-import { CardsCarousel } from './CardsCarousel'; // For favorited recipes carousel
-import RecipeCard from './RecipeCard'; // RecipeCard component for created recipes
+import { CardsCarousel } from '../components/RecipeCarousel'; // For favorited recipes carousel
+import RecipeCard from '../components/RecipeCard'; // RecipeCard component for created recipes
 import { fetchUserProfile, fetchFavoritedRecipes, fetchCreatedRecipes, updateProfile } from '../api/user'; // Example API functions
 import PropTypes from 'prop-types';
 
