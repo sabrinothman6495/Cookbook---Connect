@@ -4,6 +4,7 @@ recipe-sharing-app/
 │   │   ├── index.html             # Main HTML file
 │   │   └── favicon.ico            # App favicon
 │   ├── src/                       # Source files
+|   |   ├── assets/                # asset files(e.g. site logo)
 │   │   ├── components/            # Reusable components
 │   │   │   ├── Header.jsx         # Navigation bar (formerly Navbar)
 │   │   │   ├── Footer.jsx         # Footer component
@@ -18,22 +19,29 @@ recipe-sharing-app/
 |   |   |   └── UserProfile.jsx    # Page for user profiles
 │   │   ├── context/               # Context API for global state management
 │   │   │   ├── AuthContext.js     # Context for authentication
-│   │   │   └── RecipeContext.js   # Context for recipe data
+│   │   │   ├── RecipeContext.js   # Context for recipe data
+|   |   |   └── ThemeContext.js    # context for Mantine styling data
 │   │   ├── hooks/                 # Custom hooks
 │   │   │   ├── useAuth.js         # Hook for handling authentication logic
-│   │   │   └── useRecipes.js      # Hook for handling recipe-related logic
+│   │   │   ├── useRecipes.js      # Hook for handling recipe-related logic
+|   |   |   └── useRecipeSearch.js # Hook for handling dynamic recipe searches
 │   │   ├── styles/                # CSS/SCSS files (using Mantine)
-│   │   │   |── theme.js           # Custom Mantine theme configuration
-|   |   |   └── CardsCarousel.module.css    # Mantine CSS for Cards Carousel
+│   │   │   |── theme.jsx          # Custom Mantine theme configuration
+|   |   |   |── CardsCarousel.module.css    # Mantine CSS for Cards Carousel
+|   |   |   |── Badgecard.module.css        # Mantine CSS for RecipeCards
 │   │   ├── App.jsx                # Main app component
 │   │   ├── index.js               # Entry point for React
-│   │   └── api/                   # API service for making requests
-│   │       ├── nutritionApi.js    # Handles Nutrition API requests
-│   │       └── socialMediaApi.js  # Handles social media sharing links
+│   │   
 │   ├── .env                       # Environment variables for the client
 │   ├── package.json               # Client dependencies and scripts
-|   ├── vite.config.js
+|   ├── vite.config.js             # vite configuration
+|   ├── eslint.config.js           # linting configuration
+|   └── package-lock.json          # node-modules
 ├── server/                        # Back-end code (Node.js, Express)
+|   |── api/                   # API service for making requests
+│   │   ├── nutritionApi.js    # Handles Nutrition API requests
+│   │   ├── socialMediaApi.js  # Handles social media sharing links
+|   |   └── userAPI.js
 │   ├── config/                    # Configuration files
 │   │   ├── db.js                  # Database connection settings
 │   │   ├── auth.js                # Authentication configuration
@@ -45,7 +53,8 @@ recipe-sharing-app/
 │   │   └── User.js                # User model
 │   ├── routes/                    # API route definitions
 │   │   ├── recipeRoutes.js        # Routes for recipe-related endpoints
-│   │   └── userRoutes.js          # Routes for user-related endpoints
+│   │   ├── userRoutes.js          # Routes for user-related endpoints
+|   |   └── htmlRoutes.js          # Route to serve data to index.html file
 │   ├── middleware/                # Custom middleware
 │   │   ├── authMiddleware.js      # Middleware for authenticating requests
 │   ├── utils/                     # Utility functions (reusable logic)
@@ -56,7 +65,9 @@ recipe-sharing-app/
 │   │   └── hashUtils.js           # Utility for password hashing and comparison
 │   ├── .env                       # Environment variables for the server
 │   ├── server.js                  # Main server file
-│   └── package.json               # Server dependencies and scripts
+│   ├── package.json               # Server dependencies and scripts
+|   ├── dotenv.d.ts                # resolution for encountered TS error
+|   └── package-lock.json          # node modules
 ├── .gitignore                     # Git ignore file
 ├── README.md                      # Project documentation
 └── LICENSE                        # License information
