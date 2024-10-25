@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext'; // Context for handling authentication
 import { useNavigate } from 'react-router-dom'; // Navigation hook
 import { MantineProvider, TextInput } from '@mantine/core'; // Using Mantine for styles
-import Logo from '../assets/CookBookConnectLogo.png'; // Import the logo
+import Logo from '../assets/cookbook-logo.jpeg' // Import the logo
 
 const Header = () => {
   const { isAuthenticated, logout } = useContext(AuthContext); // Auth context to check if user is logged in

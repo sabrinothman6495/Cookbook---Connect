@@ -1,5 +1,5 @@
 recipe-sharing-app/
-├── client/                        # Front-end code (React)
+├── Cook-Vite/                        # Front-end code (React)
 │   ├── public/                    # Public assets
 │   │   ├── index.html             # Main HTML file
 │   │   └── favicon.ico            # App favicon
@@ -31,7 +31,8 @@ recipe-sharing-app/
 │   │       ├── nutritionApi.js    # Handles Nutrition API requests
 │   │       └── socialMediaApi.js  # Handles social media sharing links
 │   ├── .env                       # Environment variables for the client
-│   └── package.json               # Client dependencies and scripts
+│   ├── package.json               # Client dependencies and scripts
+|   ├── vite.config.js
 ├── server/                        # Back-end code (Node.js, Express)
 │   ├── config/                    # Configuration files
 │   │   ├── db.js                  # Database connection settings

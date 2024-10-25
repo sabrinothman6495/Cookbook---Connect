@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import socialMediaAPI from './api/socialMediaAPI.js'; // Import the new API file
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,15 +19,15 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(__dirname, '../Cook-Vite/public')));
 
 connectDB();
 
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
-app.use('/' , htmlRoutes)
+app.use('/api/social', socialMediaAPI); // Use the new router
 
-
+app.use('/', htmlRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
