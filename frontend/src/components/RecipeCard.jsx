@@ -1,11 +1,11 @@
+import React from 'react';
 import { IconHeart } from '@tabler/icons-react';
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
 import classes from '../styles/BadgeCard.module.css';
 
-export function BadgeCard({ recipe }) {
+const RecipeCard = ({ recipe }) => {
   const { image, title, description, badges } = recipe;
-
   const features = badges.map((badge) => (
     <Badge variant="light" key={badge.label} leftSection={badge.emoji}>
       {badge.label}
@@ -17,7 +17,6 @@ export function BadgeCard({ recipe }) {
       <Card.Section>
         <Image src={image} alt={title} height={180} />
       </Card.Section>
-
       <Card.Section className={classes.section} mt="md">
         <Group justify="apart">
           <Text fz="lg" fw={500}>
@@ -31,7 +30,6 @@ export function BadgeCard({ recipe }) {
           {description}
         </Text>
       </Card.Section>
-
       <Card.Section className={classes.section}>
         <Text mt="md" className={classes.label} c="dimmed">
           Perfect for you, if you enjoy
@@ -40,7 +38,6 @@ export function BadgeCard({ recipe }) {
           {features}
         </Group>
       </Card.Section>
-
       <Group mt="xs">
         <Button radius="md" style={{ flex: 1 }}>
           Show details
@@ -51,9 +48,9 @@ export function BadgeCard({ recipe }) {
       </Group>
     </Card>
   );
-}
+};
 
-BadgeCard.propTypes = {
+RecipeCard.propTypes = {
   recipe: PropTypes.shape({
     image: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -66,3 +63,5 @@ BadgeCard.propTypes = {
     ).isRequired,
   }).isRequired,
 };
+
+export default RecipeCard;

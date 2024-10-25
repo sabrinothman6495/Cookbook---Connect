@@ -1,23 +1,34 @@
 import { Sequelize } from 'sequelize';
-import { Pool } from 'pg';
+import pkg from 'pg';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Sequelize configuration
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+const { Pool } = pkg;
+
 const DB_NAME = process.env.DB_NAME;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_PORT = process.env.DB_PORT || 5432; // Default PostgreSQL port
+const DB_PORT = process.env.DB_PORT || 5432;
+
+console.log('DB_NAME:', DB_NAME);
+console.log('DB_USER:', DB_USER);
+console.log('DB_PASSWORD:', DB_PASSWORD);
+console.log('DB_HOST:', DB_HOST);
+console.log('DB_PORT:', DB_PORT);
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
-  dialect: 'postgres', // Ensure using PostgreSQL
+  dialect: 'postgres',
 });
 
-// PG Pool configuration for direct queries if needed
 const pool = new Pool({
   user: DB_USER,
   host: DB_HOST,
@@ -26,20 +37,18 @@ const pool = new Pool({
   port: DB_PORT,
 });
 
-// Function to connect to the database
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('You are connected to your cookbook database with Sequelize');
+    console.log('Connected to the database with Sequelize');
   } catch (error) {
-    console.error('Could not connect to your cookbook database with Sequelize:', error);
+    console.error('Database connection error with Sequelize:', error);
     process.exit(1);
   }
 
-  // Test connection with Pool
   pool.connect((err) => {
     if (err) {
-      console.error('Error acquiring client from pool', err.stack);
+      console.error('PG Pool connection error', err.stack);
     } else {
       console.log('Database connected successfully with PG Pool');
     }
@@ -47,4 +56,3 @@ const connectDB = async () => {
 };
 
 export { sequelize, pool, connectDB };
-

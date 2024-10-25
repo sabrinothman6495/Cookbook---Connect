@@ -1,3 +1,4 @@
+import React from 'react';
 import { Carousel } from '@mantine/carousel';
 import { useMediaQuery } from '@mantine/hooks';
 import { Paper, Text, Title, Button, useMantineTheme, rem } from '@mantine/core';
