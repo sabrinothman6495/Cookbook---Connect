@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': '/src',
+      '@': '/public',
     },
   },
   server: {
@@ -14,12 +14,7 @@ export default defineConfig({
       '/api': 'http://localhost:3001',
     },
   },
-  esbuild: {
-    loader: {
-      '.js': 'jsx',
-      '.jsx': 'jsx',
-    },
-  },
 });
+
 
 

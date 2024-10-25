@@ -12,16 +12,20 @@ import { connectDB } from './config/db.js';
 import recipeRoutes from './routes/recipeRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import errorHandler from './utils/errorHandler.js';
+import htmlRoutes from './routes/htmlRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 connectDB();
 
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
+app.use('/' , htmlRoutes)
+
 
 app.use(errorHandler);
 
