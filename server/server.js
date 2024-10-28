@@ -22,6 +22,11 @@ connectDB();
 
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
+app.get("*",(req,res)=>{
+  res.send("Welcome to Cookbook Connect API");
+  req.status(200);
+})
+
 
 app.use(errorHandler);
 
