@@ -56,13 +56,3 @@ const connectDB = async () => {
 };
 
 export { sequelize, pool, connectDB };
-
-
-
-
-
-
-
-
-
-
