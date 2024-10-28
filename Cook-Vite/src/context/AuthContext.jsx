@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { verifyToken, generateToken } from '../utils/tokenUtils';
+import { verifyToken, generateToken } from '../../../server/utils/tokenUtils';
 
 export const AuthContext = createContext();
 

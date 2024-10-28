@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.js'; // Change to your actual database config
+import { sequelize } from '../config/db.js';
 
 const Recipe = sequelize.define('Recipe', {
   recipeID: {
@@ -39,12 +39,10 @@ const Recipe = sequelize.define('Recipe', {
   tableName: 'recipes',
 });
 
-// Initialize database
 async function initializeDatabase() {
   await sequelize.sync();
 }
 
-// Seed database with dummy data
 async function seedDatabase() {
   const recipes = [
     {
@@ -96,7 +94,6 @@ async function seedDatabase() {
   await Recipe.bulkCreate(recipes);
 }
 
-// Main function to initialize and seed database
 async function main() {
   await initializeDatabase();
   await seedDatabase();
