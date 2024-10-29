@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconHeart } from '@tabler/icons-react';
+import { IconHeart } from '@tabler/icons-react/icons/IconHeart';
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
 import classes from '../styles/BadgeCard.module.css';

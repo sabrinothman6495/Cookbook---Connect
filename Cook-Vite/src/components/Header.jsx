@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MantineProvider, TextInput } from '@mantine/core';
 import { AuthContext } from '../context/AuthContext';
 import Logo from '../assets/cookbook-logo.jpeg';
+import styles from '../styles/Header.module.css';  // Add this import
+
 
 const Header = () => {
   const { isAuthenticated } = useContext(AuthContext);

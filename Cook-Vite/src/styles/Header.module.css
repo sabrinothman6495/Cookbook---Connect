@@ -1,0 +1,54 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .left {
+    flex: 1;
+  }
+  
+  .center {
+    flex: 2;
+    text-align: center;
+  }
+  
+  .right {
+    flex: 1;
+    position: relative;
+  }
+  
+  .logo {
+    height: 50px;
+    width: auto;
+  }
+  
+  .searchBar {
+    width: 100%;
+  }
+  
+  .suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 4px;
+    padding: 0;
+    list-style: none;
+    z-index: 1000;
+  }
+  
+  .suggestionItem {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  
+  .suggestionItem:hover {
+    background-color: #f5f5f5;
+  }
