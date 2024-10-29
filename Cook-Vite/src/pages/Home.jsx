@@ -3,6 +3,8 @@ import RecipeCard from '../components/RecipeCard';
 import { Loader } from '@mantine/core';
 import { useFetch } from '../hooks/useFetch';
 import styles from '../styles/Home.module.css';
+import { Link } from 'react-router-dom'; 
+import SearchBar from '../components/SearchBar';
 
 const Home = () => {
   const { data: randomRecipes, loading } = useFetch('/recipes/random?limit=3');
@@ -28,13 +30,24 @@ const Home = () => {
         </section>
 
         <section className={styles.section}>
-          <h2>Save your favorites</h2>
-          <p>Save your favorite recipes to come back to later.</p>
+          <Link to=""> 
+            <h2>Save your favorites</h2>
+            <p>Save your favorite recipes to come back to later.</p>
+          </Link>
         </section>
 
         <section className={styles.section}>
-          <h2>Track your ingredients</h2>
-          <p>Keep track of the ingredients you have in your pantry and find recipes that use them.</p>
+          <Link to="/RecipeDetails">
+            <h2>Track your ingredients</h2>
+            <p>Keep track of the ingredients you have in your pantry and find recipes that use them.</p>
+          </Link>
+        </section>
+
+        <section className={styles.section}>
+          <Link to="/Contact"> 
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback? Get in touch with us!</p>
+          </Link>
         </section>
       </main>
     </div>
@@ -42,8 +55,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-
-
-
