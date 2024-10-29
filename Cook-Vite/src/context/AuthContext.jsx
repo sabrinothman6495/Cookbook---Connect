@@ -1,16 +1,15 @@
 import { createContext, useState, useEffect } from 'react';
 import { auth } from '../utils/auth';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = auth.getToken();
     if (token) {
-      // Fetch user data from API using token
       fetch('/api/users/me', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -30,37 +29,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (credentials) => {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    });
-    const data = await response.json();
-    
-    if (response.ok) {
-      auth.setToken(data.token);
-      setUser(data.user);
-      return data;
-    }
-    throw new Error(data.message);
-  };
-
-  const logout = () => {
-    auth.removeToken();
-    setUser(null);
-  };
-
   const value = {
     user,
-    login,
-    logout,
-    isAuthenticated: auth.isAuthenticated()
+    setUser,
+    loading,
+    isAuthenticated: !!user
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <AuthContext.Provider value={value}>
@@ -68,3 +42,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+
+
