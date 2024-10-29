@@ -2,6 +2,7 @@ import React from 'react';
 import RecipeCard from '../components/RecipeCard';
 import { Loader } from '@mantine/core';
 import { useFetch } from '../hooks/useFetch';
+import styles from '../styles/Home.module.css';
 
 const Home = () => {
   const { data: randomRecipes, loading } = useFetch('/recipes/random?limit=3');
