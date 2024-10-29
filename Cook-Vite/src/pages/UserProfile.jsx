@@ -1,100 +1,100 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Modal, TextInput, Grid, Title, Group, Text } from '@mantine/core';
-import { useMantineTheme } from '@mantine/core';
+import React, { useState } from 'react';
+import { 
+  Avatar, 
+  Button, 
+  Modal, 
+  TextInput, 
+  Grid, 
+  Title, 
+  Group, 
+  Text, 
+  Loader 
+} from '@mantine/core';
 import { CardsCarousel } from '../components/RecipeCarousel';
 import RecipeCard from '../components/RecipeCard';
-import { fetchUserProfile, fetchFavoritedRecipes, fetchCreatedRecipes, updateProfile } from '../../../server/api/userAPI'; 
-import PropTypes from 'prop-types';
 
 const UserProfile = ({ userId, currentUserId }) => {
-  const [profile, setProfile] = useState(null);
-  const [favoritedRecipes, setFavoritedRecipes] = useState([]);
-  const [createdRecipes, setCreatedRecipes] = useState([]);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
-  const [editedProfile, setEditedProfile] = useState({ avatar: '', username: '', name: '', email: '' });
-  const theme = useMantineTheme();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const profileData = await fetchUserProfile(userId);
-      setProfile(profileData);
-      const favoritesData = await fetchFavoritedRecipes(userId);
-      setFavoritedRecipes(favoritesData);
-      const createdData = await fetchCreatedRecipes(userId);
-      setCreatedRecipes(createdData);
-    };
-    fetchData();
-  }, [userId]);
+  const { profile, favoritedRecipes, createdRecipes, loading, error } = useUserData(userId);
+  const { updateUserProfile, editedProfile, setEditedProfile } = useProfileUpdate(userId);
 
   const handleEditProfile = async () => {
-    await updateProfile(userId, editedProfile);
-    setProfile(prevProfile => ({ ...prevProfile, ...editedProfile }));
+    await updateUserProfile();
     setEditProfileModalOpen(false);
   };
 
-  if (!profile) return <div>Loading...</div>;
+  if (loading) return <Loader size="xl" className={styles.loader} />;
+  if (error) return <div className={styles.error}>Error: {error}</div>;
 
   const isCurrentUser = userId === currentUserId;
 
   return (
-    <div>
-      <Group position="center" direction="column" spacing="md">
-        <Avatar src={profile.avatar} size={120} radius={60} />
-        <Title order={2}>{profile.username}</Title>
-        <Text>{profile.name}</Text>
-        <Text>{profile.email}</Text>
-        {isCurrentUser && (
-          <Button onClick={() => setEditProfileModalOpen(true)}>Edit Profile</Button>
-        )}
-      </Group>
-      <Modal
+    <div className={styles.container}>
+      <ProfileHeader 
+        profile={profile}
+        isCurrentUser={isCurrentUser}
+        onEditClick={() => setEditProfileModalOpen(true)}
+      />
+
+      <EditProfileModal
         opened={editProfileModalOpen}
         onClose={() => setEditProfileModalOpen(false)}
-        title="Edit Profile"
-      >
-        <TextInput
-          label="Avatar URL"
-          value={editedProfile.avatar}
-          onChange={(e) => setEditedProfile({ ...editedProfile, avatar: e.target.value })}
-        />
-        <TextInput
-          label="Username"
-          value={editedProfile.username}
-          onChange={(e) => setEditedProfile({ ...editedProfile, username: e.target.value })}
-        />
-        <TextInput
-          label="Name"
-          value={editedProfile.name}
-          onChange={(e) => setEditedProfile({ ...editedProfile, name: e.target.value })}
-        />
-        <TextInput
-          label="Email"
-          value={editedProfile.email}
-          onChange={(e) => setEditedProfile({ ...editedProfile, email: e.target.value })}
-        />
-        <Button onClick={handleEditProfile}>Save Changes</Button>
-      </Modal>
-      <div style={{ margin: '40px 0' }}>
-        <Title order={3} align="center">Favorited Recipes</Title>
-        <CardsCarousel recipes={favoritedRecipes} />
-      </div>
-      <div style={{ margin: '40px 0' }}>
-        <Title order={3} align="center">Created Recipes</Title>
-        <Grid gutter="lg">
-          {createdRecipes.map((recipe) => (
-            <Grid.Col key={recipe.id} span={4}>
-              <RecipeCard recipe={recipe} />
-            </Grid.Col>
-          ))}
-        </Grid>
-      </div>
+        editedProfile={editedProfile}
+        setEditedProfile={setEditedProfile}
+        onSave={handleEditProfile}
+      />
+
+      <RecipeCollections 
+        favoritedRecipes={favoritedRecipes}
+        createdRecipes={createdRecipes}
+      />
     </div>
   );
 };
 
-UserProfile.propTypes = {
-  userId: PropTypes.string.isRequired,
-  currentUserId: PropTypes.string.isRequired,
-};
+const ProfileHeader = ({ profile, isCurrentUser, onEditClick }) => (
+  <Group position="center" direction="column" spacing="md">
+    <Avatar src={profile.avatar} size={120} radius={60} />
+    <Title order={2}>{profile.username}</Title>
+    <Text>{profile.name}</Text>
+    <Text>{profile.email}</Text>
+    {isCurrentUser && <Button onClick={onEditClick}>Edit Profile</Button>}
+  </Group>
+);
+
+const EditProfileModal = ({ opened, onClose, editedProfile, setEditedProfile, onSave }) => (
+  <Modal opened={opened} onClose={onClose} title="Edit Profile">
+    {['avatar', 'username', 'name', 'email'].map((field) => (
+      <TextInput
+        key={field}
+        label={field.charAt(0).toUpperCase() + field.slice(1)}
+        value={editedProfile[field]}
+        onChange={(e) => setEditedProfile({ ...editedProfile, [field]: e.target.value })}
+      />
+    ))}
+    <Button onClick={onSave}>Save Changes</Button>
+  </Modal>
+);
+
+const RecipeCollections = ({ favoritedRecipes, createdRecipes }) => (
+  <>
+    <section className={styles.section}>
+      <Title order={3} align="center">Favorited Recipes</Title>
+      <CardsCarousel recipes={favoritedRecipes} />
+    </section>
+
+    <section className={styles.section}>
+      <Title order={3} align="center">Created Recipes</Title>
+      <Grid gutter="lg">
+        {createdRecipes.map((recipe) => (
+          <Grid.Col key={recipe.id} span={4}>
+            <RecipeCard recipe={recipe} />
+          </Grid.Col>
+        ))}
+      </Grid>
+    </section>
+  </>
+);
 
 export default UserProfile;
+

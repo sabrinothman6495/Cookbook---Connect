@@ -1,4 +1,4 @@
-recipe-sharing-app/
+Cookbook-Connect/
 ├── Cook-Vite/                        # Front-end code (React)
 │   ├── public/                    # Public assets
 │   │   ├── index.html             # Main HTML file

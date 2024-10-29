@@ -1,18 +1,37 @@
-import React from 'react';
 import { MantineProvider } from '@mantine/core';
 
 export const theme = {
-  colorScheme: 'light', // or 'dark'
+  colorScheme: 'light',
   colors: {
-    brand: ['#f0f', '#d0d', '#a0a', '#707', '#404', '#202', '#101', '#000'],
+    brand: [
+      '#F0F0FF',
+      '#D0D0FF',
+      '#A0A0FF',
+      '#7070FF',
+      '#4040FF',
+      '#2020FF',
+      '#1010FF',
+      '#0000FF',
+    ],
+    accent: [
+      '#FFE8E8',
+      '#FFD1D1',
+      '#FFBABA',
+      '#FFA3A3',
+      '#FF8C8C',
+      '#FF7575',
+      '#FF5E5E',
+      '#FF4747',
+    ],
   },
-  fontFamily: 'Arial, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   headings: {
-    fontFamily: 'Verdana, sans-serif',
+    fontFamily: 'Poppins, sans-serif',
     sizes: {
-      h1: { fontSize: 30 },
-      h2: { fontSize: 25 },
-      h3: { fontSize: 20 },
+      h1: { fontSize: 32, lineHeight: 1.4 },
+      h2: { fontSize: 26, lineHeight: 1.35 },
+      h3: { fontSize: 22, lineHeight: 1.3 },
+      h4: { fontSize: 18, lineHeight: 1.25 },
     },
   },
   spacing: {
@@ -28,6 +47,11 @@ export const theme = {
     md: 12,
     lg: 16,
     xl: 20,
+  },
+  shadows: {
+    sm: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    md: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
   },
 };
 

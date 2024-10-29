@@ -6,28 +6,31 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const { Pool } = pkg;
+const {
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
+  DB_HOST = 'localhost',
+  DB_PORT = 5432
+} = process.env;
 
-const DB_NAME = process.env.DB_NAME;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_PORT = process.env.DB_PORT || 5432;
-
-console.log('DB_NAME:', DB_NAME);
-console.log('DB_USER:', DB_USER);
-console.log('DB_PASSWORD:', DB_PASSWORD);
-console.log('DB_HOST:', DB_HOST);
-console.log('DB_PORT:', DB_PORT);
-
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+const sequelizeConfig = {
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'postgres',
-});
+  logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+};
+
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, sequelizeConfig);
 
 const pool = new Pool({
   user: DB_USER,
@@ -35,24 +38,31 @@ const pool = new Pool({
   database: DB_NAME,
   password: DB_PASSWORD,
   port: DB_PORT,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Connected to the database with Sequelize');
+    console.log('✓ Sequelize connection established');
+    
+    await new Promise((resolve, reject) => {
+      pool.connect((err, client, release) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        release();
+        resolve();
+      });
+    });
+    console.log('✓ PG Pool connection established');
   } catch (error) {
-    console.error('Database connection error with Sequelize:', error);
+    console.error('✗ Database connection failed:', error);
     process.exit(1);
   }
-
-  pool.connect((err) => {
-    if (err) {
-      console.error('PG Pool connection error', err.stack);
-    } else {
-      console.log('Database connected successfully with PG Pool');
-    }
-  });
 };
 
 export { sequelize, pool, connectDB };
