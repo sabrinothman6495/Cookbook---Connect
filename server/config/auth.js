@@ -1,39 +1,47 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
-const secretKey = process.env.JWT_SECRET || 'yourSecretKey';
+const JWT_SECRET = process.env.JWT_SECRET || 'yourSecretKey';
+const JWT_EXPIRES_IN = '1h';
+const SALT_ROUNDS = 10;
 
-const generateToken = (user) => {
-  return jwt.sign(
-    { id: user._id, username: user.username, email: user.email },
-    secretKey,
-    { expiresIn: '1h' }
-  );
-};
+export const authUtils = {
+  generateToken(user) {
+    return jwt.sign(
+      {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
+  },
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
-  }
-
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Failed to authenticate token' });
+  verifyToken(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(403).json({ message: 'No token provided' });
     }
 
-    req.user = decoded;
-    next();
-  });
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = decoded;
+      next();
+    } catch (error) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+  },
+
+  async hashPassword(password) {
+    return await bcrypt.hash(password, SALT_ROUNDS);
+  },
+
+  async comparePassword(plainPassword, hashedPassword) {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+  }
 };
 
-const comparePassword = async (plainPassword, hashedPassword) => {
-  return await bcrypt.compare(plainPassword, hashedPassword);
-};
+export default authUtils;
 
-module.exports = {
-  generateToken,
-  verifyToken,
-  comparePassword,
-};

@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import ThemeProvider from './context/ThemeContext'; // Import ThemeProvider
-import RecipeProvider from './context/RecipeContext'; // Import RecipeProvider
-import AuthProvider from './context/AuthContext'; // Import AuthProvider
+import AuthProvider from './context/AuthContext';
+import RecipeProvider from './context/RecipeContext';
+import ThemeProvider from './context/ThemeContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
       <RecipeProvider>
-        <ThemeProvider> {/* Wrap the app with all providers */}
+        <ThemeProvider>
           <App />
         </ThemeProvider>
       </RecipeProvider>
