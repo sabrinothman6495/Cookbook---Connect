@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import bcrypt from 'bcrypt';
-import { sequelize } from '../config/db.js'; // Correct path
+import { sequelize } from '../config/db.js';
 
 const User = sequelize.define('User', {
   id: {
@@ -12,15 +12,25 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      len: [3, 30],
+      notEmpty: true,
+    }
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      isEmail: true,
+    }
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      len: [6, 100],
+    }
   },
   bio: {
     type: DataTypes.TEXT,
@@ -38,43 +48,77 @@ const User = sequelize.define('User', {
   hooks: {
     beforeCreate: async (user) => {
       if (user.password) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
+        user.password = await bcrypt.hash(user.password, 10);
       }
     },
     beforeUpdate: async (user) => {
-      if (user.password) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
+      if (user.changed('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
       }
     }
-  }
+  },
+  indexes: [
+    { unique: true, fields: ['email'] },
+    { unique: true, fields: ['username'] }
+  ]
 });
 
 User.prototype.validPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
-User.associate = (models) => {
+const setupAssociations = (models) => {
   User.hasMany(models.Recipe, {
     foreignKey: 'userId',
     as: 'recipes',
+    onDelete: 'CASCADE'
   });
+
   User.belongsToMany(models.Recipe, {
     through: 'UserLikes',
     as: 'likedRecipes',
     foreignKey: 'userId',
   });
-  User.belongsToMany(models.User, {
+
+  User.belongsToMany(User, {
     through: 'UserFollowers',
     as: 'followers',
     foreignKey: 'userId',
   });
-  User.belongsToMany(models.User, {
+
+  User.belongsToMany(User, {
     through: 'UserFollowers',
     as: 'following',
     foreignKey: 'followerId',
   });
 };
 
-export default User;
+const DatabaseManager = {
+  async initialize() {
+    await sequelize.sync();
+  },
+
+  async clear() {
+    await User.destroy({ where: {}, truncate: true, cascade: true });
+  },
+
+  async seed() {
+    const users = [
+      {
+        username: 'john_doe',
+        email: 'john@example.com',
+        password: 'password123',
+        bio: 'I love cooking and sharing recipes!',
+        profilePicture: 'john_doe.jpg',
+      },
+      // ... other users
+    ];
+
+    await User.bulkCreate(users);
+  }
+};
+
+export { User as default, setupAssociations, DatabaseManager };
+
+
+
