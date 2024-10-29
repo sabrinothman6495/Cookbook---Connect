@@ -38,22 +38,29 @@ export default defineConfig({
     sourcemap: true,
     minify: 'esbuild',
     rollupOptions: {
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false
+      },
       output: {
         manualChunks(id) {
           if (id.includes('@tabler/icons-react')) {
-            if (id.includes('IconHeart')) {
-              return 'icons-heart';
-            }
-            return null;
+            return 'icons';
+          }
+          if (id.includes('react')) {
+            return 'vendor';
+          }
+          if (id.includes('@mantine')) {
+            return 'mantine';
           }
         }
       }
-    },
-    commonjsOptions: {
-      include: [/@tabler\/icons-react\/.*IconHeart/],
     }
   },
 });
+
+
+
 
 
 
