@@ -3,13 +3,13 @@
 # Cookbook-Connect
 
 ### About Our Cookbook App
-As food enthusiasts we wanted to create a fun recipe sharing website that could be used to generate recipies for meals. Using social media and other API keys like Calorie King our app retrives recpie data for your every day meals. 
+As food enthusiasts we wanted to create a fun recipe sharing website that could be used to generate recipes for meals. Using social media and other API keys like Calorie King our app retrieves recipe data for your every day meals. 
 
-## Tabel of Contents 
+## Table of Contents
 
 ## Technologies Used
 * Backend: Node.js, Express, Sequelize, JavaScript
-* Frontend: React.js, Bootsrap CSS
+* Frontend: React.js, Mantine.
 * Authentication: JSON Web Tokens (JWT)
 
 ## Contributors

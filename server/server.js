@@ -26,14 +26,15 @@ connectDB();
 
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
-app.get("*",(req,res)=>{
-  res.send("Welcome to Cookbook Connect API");
-  req.status(404);
-})
-
 app.use('/api/social', socialMediaAPI); // Use the new router
-
 app.use('/', htmlRoutes);
+
+// Catch-all route for unmatched routes, returning 404
+app.get('*', (req, res) => {
+  res.status(404).send("Welcome to Cookbook Connect API - Page not found");
+});
+
+// Error handling middleware
 app.use(errorHandler);
 
 app.listen(PORT, () => {
