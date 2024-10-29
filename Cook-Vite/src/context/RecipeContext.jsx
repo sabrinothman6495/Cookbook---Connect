@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
 export const RecipeContext = createContext();
@@ -8,54 +9,75 @@ const RecipeProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Fetch recipes from the API
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get('/api/recipes');
-        setRecipes(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchRecipes = async () => {
+    try {
+      const response = await axios.get('/api/recipes');
+      setRecipes(response.data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchRecipes();
   }, []);
 
-  const addRecipe = async (newRecipe) => {
-    try {
-      const response = await axios.post('/api/recipes', newRecipe);
-      setRecipes([...recipes, response.data]);
-    } catch (err) {
-      setError(err.message);
+  const recipeOperations = {
+    addRecipe: async (newRecipe) => {
+      try {
+        const response = await axios.post('/api/recipes', newRecipe);
+        setRecipes(prev => [...prev, response.data]);
+        return response.data;
+      } catch (err) {
+        setError(err.message);
+        throw err;
+      }
+    },
+
+    updateRecipe: async (id, updatedRecipe) => {
+      try {
+        const response = await axios.put(`/api/recipes/${id}`, updatedRecipe);
+        setRecipes(prev => 
+          prev.map(recipe => recipe.recipeID === id ? response.data : recipe)
+        );
+        return response.data;
+      } catch (err) {
+        setError(err.message);
+        throw err;
+      }
+    },
+
+    deleteRecipe: async (id) => {
+      try {
+        await axios.delete(`/api/recipes/${id}`);
+        setRecipes(prev => 
+          prev.filter(recipe => recipe.recipeID !== id)
+        );
+      } catch (err) {
+        setError(err.message);
+        throw err;
+      }
     }
   };
 
-  const updateRecipe = async (id, updatedRecipe) => {
-    try {
-      const response = await axios.put(`/api/recipes/${id}`, updatedRecipe);
-      setRecipes(recipes.map((recipe) => (recipe.recipeID === id ? response.data : recipe)));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const deleteRecipe = async (id) => {
-    try {
-      await axios.delete(`/api/recipes/${id}`);
-      setRecipes(recipes.filter((recipe) => recipe.recipeID !== id));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  const value = useMemo(() => ({
+    recipes,
+    loading,
+    error,
+    ...recipeOperations
+  }), [recipes, loading, error]);
 
   return (
-    <RecipeContext.Provider value={{ recipes, loading, error, addRecipe, updateRecipe, deleteRecipe }}>
+    <RecipeContext.Provider value={value}>
       {children}
     </RecipeContext.Provider>
   );
 };
 
-export default RecipeProvider;
+RecipeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default RecipeContext.Provider;

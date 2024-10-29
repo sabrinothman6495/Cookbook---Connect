@@ -1,24 +1,25 @@
 import bcrypt from 'bcrypt';
 
-// Hash a password
-export const hashPassword = async (password) => {
-  try {
-    const saltRounds = 10; // Define the complexity of the hashing algorithm
-    const hash = await bcrypt.hash(password, saltRounds);
-    return hash;
-  } catch (error) {
-    console.error('Error hashing password:', error);
-    throw new Error('Could not hash the password.');
+const SALT_ROUNDS = 10;
+
+export const hashUtils = {
+  async hashPassword(password) {
+    try {
+      return await bcrypt.hash(password, SALT_ROUNDS);
+    } catch (error) {
+      throw new Error('Password hashing failed');
+    }
+  },
+
+  async comparePassword(password, hashedPassword) {
+    try {
+      return await bcrypt.compare(password, hashedPassword);
+    } catch (error) {
+      throw new Error('Password comparison failed');
+    }
   }
 };
 
-// Compare a password with a hash
-export const comparePassword = async (password, hashedPassword) => {
-  try {
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-    return isMatch;
-  } catch (error) {
-    console.error('Error comparing password:', error);
-    throw new Error('Could not compare the password.');
-  }
-};
+export default hashUtils;
+
+

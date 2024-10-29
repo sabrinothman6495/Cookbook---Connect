@@ -6,19 +6,13 @@ import Home from './pages/Home';
 import RecipeDetails from './pages/RecipeDetails';
 import Contact from './pages/Contact';
 import UserProfile from './pages/UserProfile';
-import AuthProvider from './context/AuthContext';
-import RecipeProvider from './context/RecipeContext';
-import ThemeProvider from './context/ThemeContext'; // Import ThemeProvider
 
 function App() {
   return (
-    <AuthProvider>
-      <RecipeProvider>
-        <ThemeProvider> {/* Wrap the app with ThemeProvider */}
           <Router>
-            <div>
+            <div className="app-container">
               <Header />
-              <main>
+              <main className="main-content">
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/recipes/:id" element={<RecipeDetails />} />
@@ -29,9 +23,6 @@ function App() {
               <Footer />
             </div>
           </Router>
-        </ThemeProvider>
-      </RecipeProvider>
-    </AuthProvider>
   );
 }
 
