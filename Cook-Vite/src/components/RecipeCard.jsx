@@ -1,9 +1,15 @@
 import React from 'react';
-import { IconHeart } from '@tabler/icons-react';
+const IconHeart = React.lazy(() => import('@tabler/icons-react').then(module => ({ default: module.IconHeart })));
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
 import classes from '../styles/BadgeCard.module.css';
 import placeholderImage from '../assets/placeholder.jpg';
+
+const HeartIcon = () => (
+  <React.Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
+    <IconHeart className={classes.like} stroke={1.5} />
+  </React.Suspense>
+);
 
 const RecipeCard = ({ recipe }) => {
   const { image, title, description, badges, country } = recipe;
@@ -44,7 +50,7 @@ const RecipeCard = ({ recipe }) => {
       <Group mt="xs">
         <Button radius="md" style={{ flex: 1 }}>Show details</Button>
         <ActionIcon variant="default" radius="md" size={36}>
-          <IconHeart className={classes.like} stroke={1.5} />
+          <HeartIcon />
         </ActionIcon>
       </Group>
     </Card>
@@ -67,4 +73,5 @@ RecipeCard.propTypes = {
 };
 
 export default RecipeCard;
+
 

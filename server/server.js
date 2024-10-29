@@ -2,12 +2,18 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+<<<<<<< HEAD
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
+=======
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+>>>>>>> origin/main
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 import { connectDB } from './config/db.js';
@@ -18,8 +24,6 @@ import errorHandler from './utils/errorHandler.js';
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-//app.use(cors());
-//app.use(compression());
 app.use(express.json());
 
 // Serve static files with correct MIME types
