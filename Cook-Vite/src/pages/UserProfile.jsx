@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
-import { 
-  Avatar, 
-  Button, 
-  Modal, 
-  TextInput, 
-  Grid, 
-  Title, 
-  Group, 
-  Text, 
-  Loader 
-} from '@mantine/core';
+import React, { useState, useContext } from 'react';
+import { Avatar, Button, Modal, TextInput, Grid, Title, Group, Text, Loader } from '@mantine/core';
 import { CardsCarousel } from '../components/RecipeCarousel';
 import RecipeCard from '../components/RecipeCard';
+import { useUserData } from '../hooks/useUserData';
+import { useProfileUpdate } from '../hooks/useProfileUpdate';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
+import styles from '../styles/UserProfile.module.css';
 
-const UserProfile = ({ userId, currentUserId }) => {
+const UserProfile = () => {
+  const { user } = useContext(AuthContext); // Get user from AuthContext
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+  const userId = user?.id;
+
+  // Ensure user exists
+  if (!userId) {
+    return <div className={styles.error}>User not found.</div>;
+  }
+
+  console.log('User ID:', userId); // Debugging - Check if userId is correctly retrieved
+
   const { profile, favoritedRecipes, createdRecipes, loading, error } = useUserData(userId);
   const { updateUserProfile, editedProfile, setEditedProfile } = useProfileUpdate(userId);
 
@@ -26,16 +30,13 @@ const UserProfile = ({ userId, currentUserId }) => {
   if (loading) return <Loader size="xl" className={styles.loader} />;
   if (error) return <div className={styles.error}>Error: {error}</div>;
 
-  const isCurrentUser = userId === currentUserId;
-
   return (
     <div className={styles.container}>
-      <ProfileHeader 
+      <ProfileHeader
         profile={profile}
-        isCurrentUser={isCurrentUser}
+        isCurrentUser={true}
         onEditClick={() => setEditProfileModalOpen(true)}
       />
-
       <EditProfileModal
         opened={editProfileModalOpen}
         onClose={() => setEditProfileModalOpen(false)}
@@ -43,8 +44,7 @@ const UserProfile = ({ userId, currentUserId }) => {
         setEditedProfile={setEditedProfile}
         onSave={handleEditProfile}
       />
-
-      <RecipeCollections 
+      <RecipeCollections
         favoritedRecipes={favoritedRecipes}
         createdRecipes={createdRecipes}
       />
@@ -82,7 +82,6 @@ const RecipeCollections = ({ favoritedRecipes, createdRecipes }) => (
       <Title order={3} align="center">Favorited Recipes</Title>
       <CardsCarousel recipes={favoritedRecipes} />
     </section>
-
     <section className={styles.section}>
       <Title order={3} align="center">Created Recipes</Title>
       <Grid gutter="lg">
@@ -97,4 +96,6 @@ const RecipeCollections = ({ favoritedRecipes, createdRecipes }) => (
 );
 
 export default UserProfile;
+
+
 
