@@ -1,7 +1,6 @@
 Cookbook-Connect/
 ├── Cook-Vite/                        # Front-end code (React)
 │   ├── public/                    # Public assets
-│   │   ├── index.html             # Main HTML file
 │   │   └── favicon.ico            # App favicon
 │   ├── src/                       # Source files
 |   |   ├── assets/                # asset files(e.g. site logo)
@@ -26,13 +25,18 @@ Cookbook-Connect/
 │   │   │   ├── useRecipes.js      # Hook for handling recipe-related logic
 |   |   |   └── useRecipeSearch.js # Hook for handling dynamic recipe searches
 │   │   ├── styles/                # CSS/SCSS files (using Mantine)
-│   │   │   |── theme.jsx          # Custom Mantine theme configuration
-|   |   |   |── CardsCarousel.module.css    # Mantine CSS for Cards Carousel
-|   |   |   |── Badgecard.module.css        # Mantine CSS for RecipeCards
+│   │   │   ├── theme.jsx          # Custom Mantine theme configuration
+|   |   |   ├── CardsCarousel.module.css    # Mantine CSS for Cards Carousel
+|   |   |   ├── Badgecard.module.css        # Mantine CSS for RecipeCards
+|   |   |   ├── Header.module.css           # CSS for Header.jsx
+|   |   |   └── Home.module.css             # CSS for Home.jsx
+|   |   ├── utils/
+|   |   |   └── auth.js            # utility for client side JWT auth
 │   │   ├── App.jsx                # Main app component
 │   │   ├── index.js               # Entry point for React
 │   │   
 │   ├── .env                       # Environment variables for the client
+│   ├── index.html                 # Main HTML file
 │   ├── package.json               # Client dependencies and scripts
 |   ├── vite.config.js             # vite configuration
 |   ├── eslint.config.js           # linting configuration
@@ -41,20 +45,22 @@ Cookbook-Connect/
 |   |── api/                   # API service for making requests
 │   │   ├── nutritionApi.js    # Handles Nutrition API requests
 │   │   ├── socialMediaApi.js  # Handles social media sharing links
-|   |   └── userAPI.js
+|   |   └── userAPI.js         # Handles user API requests
 │   ├── config/                    # Configuration files
 │   │   ├── db.js                  # Database connection settings
 │   │   ├── auth.js                # Authentication configuration
 │   ├── controllers/               # Controller functions for API endpoints
-│   │   ├── recipeController.js     # Logic for handling recipes
-│   │   └── userController.js       # Logic for handling users
+│   │   ├── recipeController.js    # Logic for handling recipes
+│   │   ├── userController.js      # Logic for handling users
+|   |   └── authController.js      # Logic for handling authentication
 │   ├── models/                    # Database models
 │   │   ├── Recipe.js              # Recipe model
 │   │   └── User.js                # User model
 │   ├── routes/                    # API route definitions
 │   │   ├── recipeRoutes.js        # Routes for recipe-related endpoints
 │   │   ├── userRoutes.js          # Routes for user-related endpoints
-|   |   └── htmlRoutes.js          # Route to serve data to index.html file
+|   |   ├── htmlRoutes.js          # Route to serve data to index.html file
+|   |   └── authRoutes.js          # Route to serve authentication data
 │   ├── middleware/                # Custom middleware
 │   │   ├── authMiddleware.js      # Middleware for authenticating requests
 │   ├── utils/                     # Utility functions (reusable logic)

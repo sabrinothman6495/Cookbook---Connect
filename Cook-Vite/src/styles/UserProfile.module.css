@@ -1,0 +1,27 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .section {
+    margin-bottom: 2rem;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+  }
+  
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  

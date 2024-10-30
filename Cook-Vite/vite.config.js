@@ -11,7 +11,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@context': path.resolve(__dirname, './src/context'),
-      '@styles': path.resolve(__dirname, './src/styles')
+      '@styles': path.resolve(__dirname, './src/styles'),
     },
   },
   esbuild: {
@@ -40,11 +40,11 @@ export default defineConfig({
     rollupOptions: {
       treeshake: {
         moduleSideEffects: false,
-        propertyReadSideEffects: false
+        propertyReadSideEffects: false,
       },
       output: {
         manualChunks(id) {
-          if (id.includes('@tabler/icons-react')) {
+          if (id.includes('@tabler/icons-react') || id.includes('react-icons')) {
             return 'icons';
           }
           if (id.includes('react')) {
@@ -53,9 +53,9 @@ export default defineConfig({
           if (id.includes('@mantine')) {
             return 'mantine';
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
 });
 

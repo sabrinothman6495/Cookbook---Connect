@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 const IconHeart = React.lazy(() => import('@tabler/icons-react').then(module => ({ default: module.IconHeart })));
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
@@ -6,14 +6,13 @@ import classes from '../styles/BadgeCard.module.css';
 import placeholderImage from '../assets/placeholder.jpg';
 
 const HeartIcon = () => (
-  <React.Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
+  <Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
     <IconHeart className={classes.like} stroke={1.5} />
-  </React.Suspense>
+  </Suspense>
 );
 
 const RecipeCard = ({ recipe }) => {
   const { image, title, description, badges, country } = recipe;
-
   const features = badges.map((badge) => (
     <Badge 
       variant="light" 
@@ -29,7 +28,6 @@ const RecipeCard = ({ recipe }) => {
       <Card.Section>
         <Image src={image || placeholderImage} alt={title} height={180} />
       </Card.Section>
-
       <Card.Section className={classes.section} mt="md">
         <Group justify="apart">
           <Text fz="lg" fw={500}>{title}</Text>
@@ -37,7 +35,6 @@ const RecipeCard = ({ recipe }) => {
         </Group>
         <Text fz="sm" mt="xs">{description}</Text>
       </Card.Section>
-
       <Card.Section className={classes.section}>
         <Text mt="md" className={classes.label} c="dimmed">
           Perfect for you, if you enjoy
@@ -46,7 +43,6 @@ const RecipeCard = ({ recipe }) => {
           {features}
         </Group>
       </Card.Section>
-
       <Group mt="xs">
         <Button radius="md" style={{ flex: 1 }}>Show details</Button>
         <ActionIcon variant="default" radius="md" size={36}>
