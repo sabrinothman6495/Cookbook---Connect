@@ -2,6 +2,21 @@ import User from '../models/User.js';
 import Recipe from '../models/Recipe.js';
 import { hashUtils } from '../utils/hashUtil.js';
 
+// Function to validate user data
+const validateUserData = (data) => {
+  const { email, username } = data;
+  const errors = [];
+  
+  if (!email.includes('@')) {
+    errors.push('Invalid email format');
+  }
+  if (!username || username.length < 3) {
+    errors.push('Username must be at least 3 characters long');
+  }
+  
+  return errors;
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     console.log('Fetching all users'); // Log start of function
@@ -36,6 +51,10 @@ export const updateProfile = async (req, res) => {
   const { avatar, username, name, email } = req.body;
   console.log('Updating profile for user ID:', id); // Log user ID and update details
 
+  console.log('Updating profile for user ID:', id);
+
+  console.log('Updating profile for user ID:', id); // Log user ID and update details
+
   try {
     const user = await User.findByPk(id);
     if (user) {
@@ -55,10 +74,17 @@ export const createUser = async (req, res) => {
   try {
     console.log('Creating new user with data:', req.body); // Log user data being created
     const { password, ...userData } = req.body;
+
+    // Validate user data
+    const errors = validateUserData(userData);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
     const hashedPassword = await hashUtils.hashPassword(password);
     const newUser = await User.create({
       ...userData,
-      password: hashedPassword
+      password: hashedPassword,
     });
     res.status(201).json(newUser);
   } catch (error) {
@@ -78,6 +104,13 @@ export const updateUser = async (req, res) => {
       if (password) {
         updateData.password = await hashUtils.hashPassword(password);
       }
+
+      // Validate user data
+      const errors = validateUserData(updateData);
+      if (errors.length > 0) {
+        return res.status(400).json({ errors });
+      }
+
       await user.update(updateData);
       res.json(user);
     } else {
@@ -98,7 +131,7 @@ export const deleteUser = async (req, res) => {
     const user = await User.findByPk(id);
     if (user) {
       await user.destroy();
-      res.json({ message: 'User deleted' });
+      res.json({ message: 'User deleted successfully' });
     } else {
       console.log('User not found for deletion'); // Log if user is not found
       res.status(404).json({ message: 'User not found' });
