@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 const IconHeart = React.lazy(() => import('@tabler/icons-react').then(module => ({ default: module.IconHeart })));
 import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
-import classes from '../styles/BadgeCard.module.css';
 import placeholderImage from '../assets/placeholder.jpg';
 
 const HeartIcon = () => (
