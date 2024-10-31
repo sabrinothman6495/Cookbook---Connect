@@ -65,29 +65,7 @@ const Recipe = sequelize.define('Recipe', {
   ]
 });
 
-const RecipeManager = {
-  async initialize() {
-    await sequelize.sync();
-  },
+export default Recipe;
 
-  async seed() {
-    const recipes = [
-      {
-        recipeName: 'Spaghetti Bolognese',
-        ingredients: 'Spaghetti, minced meat, tomatoes, onion, garlic, olive oil, herbs',
-        cookingTime: '30 minutes',
-        instructions: 'Cook spaghetti. In a separate pan, cook minced meat and add other ingredients.',
-        difficulty: 'easy',
-        servingSize: 4,
-        image: '',
-      },
-      // ... other recipes
-    ];
-
-    await Recipe.bulkCreate(recipes);
-  }
-};
-
-export { Recipe as default, RecipeManager };
 
 

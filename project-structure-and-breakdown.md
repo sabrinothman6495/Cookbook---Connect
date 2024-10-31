@@ -48,14 +48,20 @@ Cookbook-Connect/
 |   |   └── userAPI.js         # Handles user API requests
 │   ├── config/                    # Configuration files
 │   │   ├── db.js                  # Database connection settings
-│   │   └── auth.js                # Authentication configuration
+│   │   ├── auth.js                # Authentication configuration
+|   |   └── config.json            # general configuration file
 │   ├── controllers/               # Controller functions for API endpoints
 │   │   ├── recipeController.js    # Logic for handling recipes
 │   │   ├── userController.js      # Logic for handling users
 |   |   └── authController.js      # Logic for handling authentication
 │   ├── models/                    # Database models
 │   │   ├── Recipe.js              # Recipe model
-│   │   └── User.js                # User model
+│   │   ├── User.js                # User model
+|   |   └── index.js               # index file to manage model association
+|   ├── /migrations
+|   |   ├── 20231031-create-recipes.js   # Migration file for creating the recipes table
+|   |   ├── 20231031-create-users.js     # Migration file for creating the users table
+|   |   └── seed.js                      # Seed file for populating the database with initial data
 │   ├── routes/                    # API route definitions
 │   │   ├── recipeRoutes.js        # Routes for recipe-related endpoints
 │   │   ├── userRoutes.js          # Routes for user-related endpoints

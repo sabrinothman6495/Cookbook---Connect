@@ -67,58 +67,8 @@ User.prototype.validPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const setupAssociations = (models) => {
-  User.hasMany(models.Recipe, {
-    foreignKey: 'userId',
-    as: 'recipes',
-    onDelete: 'CASCADE'
-  });
+export default User;
 
-  User.belongsToMany(models.Recipe, {
-    through: 'UserLikes',
-    as: 'likedRecipes',
-    foreignKey: 'userId',
-  });
-
-  User.belongsToMany(User, {
-    through: 'UserFollowers',
-    as: 'followers',
-    foreignKey: 'userId',
-  });
-
-  User.belongsToMany(User, {
-    through: 'UserFollowers',
-    as: 'following',
-    foreignKey: 'followerId',
-  });
-};
-
-const DatabaseManager = {
-  async initialize() {
-    await sequelize.sync();
-  },
-
-  async clear() {
-    await User.destroy({ where: {}, truncate: true, cascade: true });
-  },
-
-  async seed() {
-    const users = [
-      {
-        username: 'john_doe',
-        email: 'john@example.com',
-        password: 'password123',
-        bio: 'I love cooking and sharing recipes!',
-        profilePicture: '',
-      },
-      // ... other users
-    ];
-
-    await User.bulkCreate(users);
-  }
-};
-
-export { User as default, setupAssociations, DatabaseManager };
 
 
 

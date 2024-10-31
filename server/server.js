@@ -8,6 +8,7 @@ import recipeRoutes from './routes/recipeRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js'; // Import authRoutes
 import errorHandler from './utils/errorHandler.js';
+import seedDatabase from './config/seed.js'; // Import seedDatabase
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,15 +47,17 @@ app.get('*', (_req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
-  connectDB().catch(console.error);
+  await connectDB();
+  await seedDatabase(); // Call the seeding function
 });
 
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Rejection:', err);
   process.exit(1);
 });
+
 
 
 
