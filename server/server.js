@@ -1,29 +1,23 @@
 import express from 'express';
+import cors from 'cors'; // Import CORS middleware
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-<<<<<<< HEAD
-
+import { connectDB } from './config/db.js';
+import recipeRoutes from './routes/recipeRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js'; // Import authRoutes
+import errorHandler from './utils/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
-=======
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
->>>>>>> origin/main
 dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-import { connectDB } from './config/db.js';
-import recipeRoutes from './routes/recipeRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import errorHandler from './utils/errorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+app.use(cors()); // Enable CORS
 app.use(express.json());
 
 // Serve static files with correct MIME types
@@ -36,6 +30,7 @@ app.use(express.static(path.join(__dirname, '../Cook-Vite/dist/'), {
 }));
 
 // API routes
+app.use('/api/auth', authRoutes); // Ensure this is included
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
 
@@ -60,6 +55,8 @@ process.on('unhandledRejection', (err) => {
   console.error('Unhandled Rejection:', err);
   process.exit(1);
 });
+
+
 
 
 

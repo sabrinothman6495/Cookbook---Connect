@@ -92,4 +92,4 @@ export const recipeController = {
 
 export const createRecipe = [recipeValidation, handleValidationErrors, recipeController.createRecipe];
 export const { getAllRecipes, getRecipeById, updateRecipe, deleteRecipe } = recipeController;
-  deleteRecipe
+deleteRecipe

@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MantineProvider, TextInput } from '@mantine/core';
 import { AuthContext } from '../context/AuthContext';
 import Logo from '../assets/cookbook-logo.jpeg';
 import styles from '../styles/Header.module.css';  // Add this import
 
-
 const Header = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
+
+  console.log('Header isAuthenticated:', isAuthenticated);
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -39,13 +40,11 @@ const Header = () => {
             <Link to="/profile">Profile</Link>
           )}
         </div>
-
         <div className={styles.center}>
           <Link to="/">
             <img src={Logo} alt="CookBook Connect Logo" className={styles.logo} />
           </Link>
         </div>
-
         <div className={styles.right}>
           <TextInput
             placeholder="Search recipes, users, categories..."
@@ -73,3 +72,4 @@ const Header = () => {
 };
 
 export default Header;
+
