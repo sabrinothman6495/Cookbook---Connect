@@ -86,7 +86,6 @@ const User = sequelize.define('User', {
     defaultValue: DataTypes.NOW,
   },
 }, {
-  // Additional options
   hooks: {
     // Your hooks here
   },
@@ -168,5 +167,16 @@ Recipe.belongsTo(User, {
   as: 'creator',
 });
 
+// Connect to the database
+const connectDB = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Database connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+};
+
 // Export models and connection
 export { sequelize, pool, connectDB };
+
