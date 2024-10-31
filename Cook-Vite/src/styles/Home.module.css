@@ -14,3 +14,51 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
   }
+  /* Home.module.css */
+
+.container {
+  font-family: 'Lato', sans-serif; 
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-family: 'Poppins', sans-serif; 
+  color: #008080; /* Example accent color */
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.section {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+  color: #FFA07A; /* Example accent color */
+  margin-bottom: 10px;
+}
+
+.recipeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
