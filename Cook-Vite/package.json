@@ -20,6 +20,7 @@
     "@mantine/modals": "^6.0.0",
     "@tabler/icons-react": "^3.20.0",
     "axios": "^1.4.0",
+    "jwt-decode": "^4.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

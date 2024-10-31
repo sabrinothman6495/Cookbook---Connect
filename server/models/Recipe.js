@@ -79,7 +79,7 @@ const RecipeManager = {
         instructions: 'Cook spaghetti. In a separate pan, cook minced meat and add other ingredients.',
         difficulty: 'easy',
         servingSize: 4,
-        image: 'spaghetti.jpg',
+        image: '',
       },
       // ... other recipes
     ];

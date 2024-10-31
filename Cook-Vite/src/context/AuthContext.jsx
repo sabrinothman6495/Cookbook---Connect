@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect } from 'react';
-import { auth } from '../utils/auth';
+import { createContext, useState, useEffect } from "react";
+import { auth } from "../utils/auth";
 
 export const AuthContext = createContext();
 
@@ -9,33 +9,50 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = auth.getToken();
-    console.log('Retrieved Token:', token);  // Log the token
+    console.log('Retrieved Token:', token); // Log the token
 
     if (token) {
-      fetch('/api/users/me', {
+      fetch('/api/users/', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .then(res => res.json())
-      .then(data => {
-        setUser(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        auth.removeToken();
-        setLoading(false);
-      });
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch user data');
+          return res.json();
+        })
+        .then(data => {
+          console.log('Fetched User Data:', data); // Log the fetched user data
+          setUser(data.user); // Assume the user data structure has a user field
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+          auth.removeToken();
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
   }, []);
 
+  const login = (userData) => {
+    setUser(userData.user); // Assuming userData contains user info with a user field
+    auth.setToken(userData.token); // Save the token
+  };
+
+  const logout = () => {
+    setUser(null);
+    auth.removeToken();
+  };
+
   const value = {
     user,
     setUser,
     loading,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    login,
+    logout
   };
 
   console.log('AuthContext Value:', value);
@@ -48,6 +65,12 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
+
+
+
+
+
+
 
 
 

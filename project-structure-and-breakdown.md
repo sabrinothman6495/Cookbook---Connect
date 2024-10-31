@@ -33,7 +33,7 @@ Cookbook-Connect/
 |   |   ├── utils/
 |   |   |   └── auth.js            # utility for client side JWT auth
 │   │   ├── App.jsx                # Main app component
-│   │   ├── index.js               # Entry point for React
+│   │   └── index.js               # Entry point for React
 │   │   
 │   ├── .env                       # Environment variables for the client
 │   ├── index.html                 # Main HTML file
@@ -48,7 +48,7 @@ Cookbook-Connect/
 |   |   └── userAPI.js         # Handles user API requests
 │   ├── config/                    # Configuration files
 │   │   ├── db.js                  # Database connection settings
-│   │   ├── auth.js                # Authentication configuration
+│   │   └── auth.js                # Authentication configuration
 │   ├── controllers/               # Controller functions for API endpoints
 │   │   ├── recipeController.js    # Logic for handling recipes
 │   │   ├── userController.js      # Logic for handling users

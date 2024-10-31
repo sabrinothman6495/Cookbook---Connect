@@ -6,7 +6,7 @@ import Logo from '../assets/cookbook-logo.jpeg';
 import styles from '../styles/Header.module.css';  // Add this import
 
 const Header = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
@@ -30,6 +30,11 @@ const Header = () => {
     setSuggestions([]);
   };
 
+  const handleLogout = () => {
+    logout(); // Call the logout function from context
+    navigate('/'); // Optionally redirect after logout
+  };
+
   return (
     <MantineProvider theme={{ colorScheme: 'light' }}>
       <header className={styles.header}>
@@ -37,7 +42,10 @@ const Header = () => {
           {!isAuthenticated ? (
             <Link to="/login">Login</Link>
           ) : (
-            <Link to="/profile">Profile</Link>
+            <>
+              <Link to="/profile">Profile</Link>
+              <button onClick={handleLogout}>Logout</button>
+            </>
           )}
         </div>
         <div className={styles.center}>

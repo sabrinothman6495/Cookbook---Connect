@@ -1,145 +1,117 @@
-import User from '../models/User.js';
 import Recipe from '../models/Recipe.js';
-import { hashUtils } from '../utils/hashUtil.js';
+import User from '../models/User.js'; // Ensure this is imported if you need the User model
+import { body, validationResult } from 'express-validator';
 
-export const getAllUsers = async (req, res) => {
-  try {
-    console.log('Fetching all users'); // Log start of function
-    const users = await User.findAll({ attributes: { exclude: ['password'] } });
-    res.json(users);
-  } catch (error) {
-    console.error('Error fetching all users:', error); // Detailed log
-    res.status(500).json({ message: error.message });
-  }
-};
+// Validation middleware for creating/updating users (if needed)
+const userValidation = [
+    body('username').trim().notEmpty().withMessage('Username is required'),
+    body('email').isEmail().withMessage('Valid email is required'),
+    // Add any other validation rules as necessary
+];
 
-export const getUserById = async (req, res) => {
-  const { id } = req.params;
-  console.log('Fetching user by ID:', id); // Log user ID being fetched
-
-  try {
-    const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
-    if (user) {
-      res.json(user);
-    } else {
-      console.log('User not found'); // Log if user is not found
-      res.status(404).json({ message: 'User not found' });
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
-  } catch (error) {
-    console.error('Error fetching user by ID:', error); // Detailed log
-    res.status(500).json({ message: error.message });
-  }
+    next();
 };
 
-export const updateProfile = async (req, res) => {
-  const { id } = req.params;
-  const { avatar, username, name, email } = req.body;
-  console.log('Updating profile for user ID:', id); // Log user ID and update details
+export const userController = {
+    async getAllUsers(req, res) {
+        try {
+            const users = await User.findAll(); // Adjust based on your User model
+            res.status(200).json(users);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
 
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.update({ avatar, username, name, email });
-      res.json(user);
-    } else {
-      console.log('User not found for updating profile'); // Log if user is not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Error updating profile:', error); // Detailed log
-    res.status(400).json({ message: error.message });
-  }
+    async getUserById(req, res) {
+        const userId = req.params.id;
+        try {
+            const user = await User.findByPk(userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async getFavoritedRecipes(req, res) {
+        const userId = req.params.id;
+        try {
+            const userWithFavorites = await User.findByPk(userId, {
+                include: [{ model: Recipe, as: 'favorites' }] // Ensure 'favorites' association is defined
+            });
+
+            if (!userWithFavorites) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.status(200).json(userWithFavorites.favorites);
+        } catch (error) {
+            console.error('Error fetching favorited recipes:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async getCreatedRecipes(req, res) {
+        const userId = req.params.id;
+        try {
+            const recipes = await Recipe.findAll({ where: { creatorId: userId } }); // Adjust 'creatorId' based on your schema
+            res.status(200).json(recipes);
+        } catch (error) {
+            console.error('Error fetching created recipes:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async updateProfile(req, res) {
+        const userId = req.params.id;
+        try {
+            const [updated] = await User.update(req.body, {
+                where: { id: userId }, // Ensure this matches your User model
+                returning: true,
+            });
+            if (!updated) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            const updatedUser = await User.findByPk(userId);
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            console.error('Error updating user profile:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async createUser(req, res) {
+        // Implementation for creating a user, with validation
+        // Example:
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // ... add the logic for user creation
+    },
+
+    async updateUser(req, res) {
+        // Implementation for updating a user
+    },
+
+    async deleteUser(req, res) {
+        // Implementation for deleting a user
+    },
 };
 
-export const createUser = async (req, res) => {
-  try {
-    console.log('Creating new user with data:', req.body); // Log user data being created
-    const { password, ...userData } = req.body;
-    const hashedPassword = await hashUtils.hashPassword(password);
-    const newUser = await User.create({
-      ...userData,
-      password: hashedPassword
-    });
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error('Error creating user:', error); // Detailed log
-    res.status(400).json({ message: error.message });
-  }
-};
+export const createUser = [userValidation, handleValidationErrors, userController.createUser];
+export const { getAllUsers, getUserById, updateProfile, updateUser, deleteUser } = userController;
 
-export const updateUser = async (req, res) => {
-  const { id } = req.params;
-  console.log('Updating user ID:', id); // Log user ID and update details
 
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      const { password, ...updateData } = req.body;
-      if (password) {
-        updateData.password = await hashUtils.hashPassword(password);
-      }
-      await user.update(updateData);
-      res.json(user);
-    } else {
-      console.log('User not found for updating'); // Log if user is not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Error updating user:', error); // Detailed log
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const deleteUser = async (req, res) => {
-  const { id } = req.params;
-  console.log('Deleting user ID:', id); // Log user ID being deleted
-
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.destroy();
-      res.json({ message: 'User deleted' });
-    } else {
-      console.log('User not found for deletion'); // Log if user is not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting user:', error); // Detailed log
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const getFavoritedRecipes = async (req, res) => {
-  const { id } = req.params;
-  console.log('Fetching favorited recipes for user ID:', id); // Log user ID for favorited recipes
-
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      const favoritedRecipes = await user.getFavoritedRecipes();
-      res.json(favoritedRecipes);
-    } else {
-      console.log('User not found for favorited recipes'); // Log if user is not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching favorited recipes:', error); // Detailed log
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const getCreatedRecipes = async (req, res) => {
-  const { id } = req.params;
-  console.log('Fetching created recipes for user ID:', id); // Log user ID for created recipes
-
-  try {
-    const recipes = await Recipe.findAll({ where: { userId: id } });
-    res.json(recipes);
-  } catch (error) {
-    console.error('Error fetching created recipes:', error); // Detailed log
-    res.status(500).json({ message: error.message });
-  }
-};
 
 
 

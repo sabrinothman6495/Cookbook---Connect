@@ -109,7 +109,7 @@ const DatabaseManager = {
         email: 'john@example.com',
         password: 'password123',
         bio: 'I love cooking and sharing recipes!',
-        profilePicture: 'john_doe.jpg',
+        profilePicture: '',
       },
       // ... other users
     ];

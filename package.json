@@ -7,10 +7,14 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server/server.js",
     "client": "npm start --prefix Cook-Vite",
-    "install-all": "npm install && cd server && npm install && cd ../Cook-Vite && npm install",
-    "build": "cd Cook-Vite && npm run build",
-    "test": "concurrently \"cd server && npm test\" \"cd Cook-Vite && npm test\"",
+    "install-all": "npm install && (cd server && npm install) && (cd Cook-Vite && npm install)",
+    "build": "rimraf Cook-Vite/dist && cd Cook-Vite && npm run build",
+    "test": "concurrently \"npm run test:server\" \"npm run test:client\"",
+    "test:server": "cd server && npm test",
+    "test:client": "cd Cook-Vite && npm test",
     "lint": "eslint .",
+    "lint:server": "eslint server/**/*.js",
+    "lint:client": "eslint Cook-Vite/src/**/*.jsx",
     "dev": "cross-env NODE_ENV=development npm start"
   },
   "dependencies": {
@@ -19,8 +23,11 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "rimraf": "^3.0.2",
+    "eslint": "^8.0.0"
   },
   "author": "Your Name",
   "license": "ISC"
 }
+

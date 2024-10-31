@@ -4,13 +4,13 @@ import { CardsCarousel } from '../components/RecipeCarousel';
 import RecipeCard from '../components/RecipeCard';
 import { useUserData } from '../hooks/useUserData';
 import { useProfileUpdate } from '../hooks/useProfileUpdate';
-import { AuthContext } from '../context/AuthContext'; // Import AuthContext
+import { AuthContext } from '../context/AuthContext';
 import styles from '../styles/UserProfile.module.css';
 
 const UserProfile = () => {
-  const { user } = useContext(AuthContext); // Get user from AuthContext
+  const { user } = useContext(AuthContext);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
-  const userId = user?.id;
+  const userId = user?.id; // Ensure user has an id field
 
   // Ensure user exists
   if (!userId) {
@@ -80,22 +80,35 @@ const RecipeCollections = ({ favoritedRecipes, createdRecipes }) => (
   <>
     <section className={styles.section}>
       <Title order={3} align="center">Favorited Recipes</Title>
-      <CardsCarousel recipes={favoritedRecipes} />
+      {favoritedRecipes.length === 0 ? (
+        <Text align="center">No favorited recipes.</Text>
+      ) : (
+        <CardsCarousel recipes={favoritedRecipes} />
+      )}
     </section>
     <section className={styles.section}>
       <Title order={3} align="center">Created Recipes</Title>
-      <Grid gutter="lg">
-        {createdRecipes.map((recipe) => (
-          <Grid.Col key={recipe.id} span={4}>
-            <RecipeCard recipe={recipe} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      {createdRecipes.length === 0 ? (
+        <Text align="center">No created recipes.</Text>
+      ) : (
+        <Grid gutter="lg">
+          {createdRecipes.map((recipe) => (
+            <Grid.Col key={recipe.id} span={4}>
+              <RecipeCard recipe={recipe} />
+            </Grid.Col>
+          ))}
+        </Grid>
+      )}
     </section>
   </>
 );
 
 export default UserProfile;
+
+
+
+
+
 
 
 

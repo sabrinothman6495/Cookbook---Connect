@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import pkg from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -31,7 +31,6 @@ const sequelizeConfig = {
 };
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, sequelizeConfig);
-
 const pool = new Pool({
   user: DB_USER,
   host: DB_HOST,
@@ -43,26 +42,131 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-const connectDB = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('✓ Sequelize connection established');
-    
-    await new Promise((resolve, reject) => {
-      pool.connect((err, client, release) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        release();
-        resolve();
-      });
-    });
-    console.log('✓ PG Pool connection established');
-  } catch (error) {
-    console.error('✗ Database connection failed:', error);
-    process.exit(1);
-  }
-};
+// Define Models
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      len: [3, 30],
+      notEmpty: true,
+    }
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: [6, 100],
+    }
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    defaultValue: '',
+  },
+  profilePicture: {
+    type: DataTypes.STRING,
+    defaultValue: 'default-avatar.png',
+  },
+  dateJoined: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+}, {
+  // Additional options
+  hooks: {
+    // Your hooks here
+  },
+  indexes: [
+    { unique: true, fields: ['email'] },
+    { unique: true, fields: ['username'] }
+  ]
+});
 
+const Recipe = sequelize.define('Recipe', {
+  recipeID: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  recipeName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: [2, 100],
+      notEmpty: true,
+    }
+  },
+  ingredients: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    }
+  },
+  cookingTime: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    }
+  },
+  instructions: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    }
+  },
+  difficulty: {
+    type: DataTypes.ENUM('easy', 'medium', 'hard'),
+    allowNull: false,
+    defaultValue: 'medium',
+  },
+  servingSize: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      min: 1,
+      max: 50,
+    }
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      isUrl: true,
+    }
+  }
+}, {
+  tableName: 'recipes',
+  timestamps: true,
+});
+
+// Define Associations
+User.hasMany(Recipe, {
+  foreignKey: 'creatorId',
+  as: 'recipes',
+  onDelete: 'CASCADE'
+});
+
+Recipe.belongsTo(User, {
+  foreignKey: 'creatorId',
+  as: 'creator',
+});
+
+// Export models and connection
 export { sequelize, pool, connectDB };
