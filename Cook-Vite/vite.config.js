@@ -27,7 +27,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:3002',
+        target: 'https://cookbook-connect-i81c.onrender.com/',
         changeOrigin: true,
         secure: false,
       },
