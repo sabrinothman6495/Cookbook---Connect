@@ -13,9 +13,11 @@ const {
   DB_NAME,
   DB_USER,
   DB_PASSWORD,
-  DB_HOST = 'localhost',
   DB_PORT = 5432
 } = process.env;
+
+// Default DB_HOST to 'localhost' if it's not provided in the environment variables
+const DB_HOST = process.env.DB_HOST || 'localhost';
 
 const sequelizeConfig = {
   host: DB_HOST,
